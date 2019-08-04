@@ -1,17 +1,18 @@
 export class Program {
 
-  _vsrc : string;
-  _fsrc : string;
-  _vsh : any;
-  _fsh : any;
-  _p : any;
+  private _vsrc : string;
+  private _fsrc : string;
+  private _vsh : any;
+  private _fsh : any;
+  private _p : any;
 
-  constructor(vertex_source : string, fragment_source : string){
+  public constructor(vertex_source : string, fragment_source : string){
     this._vsrc =    vertex_source;
     this._fsrc =  fragment_source;
+    _create();
   }
 
-  _createShader(gl : any, type : any, source:string){
+  private _createShader(gl : any, type : any, source:string){
     let shader = gl.createShader(type);
     gl.shaderSource(shader,source);
     gl.compileShader(shader);
@@ -23,7 +24,7 @@ export class Program {
     }
   }
 
-  _create(gl : any){
+  private _create(gl : any){
     this._vsh = this._createShader(gl, gl.VERTEX_SHADER,this._vsrc)
     this._vsh = this._createShader(gl, gl.FRAGMENT_SHADER,this._fsrc)
     this._p = gl.createProgram();
@@ -38,14 +39,5 @@ export class Program {
     console.log(gl.getProgramInfoLog(this._p));
     gl.deleteProgram(this._p);
 
-
-
-
-
-
-
-
   }
-
-
 }

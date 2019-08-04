@@ -2,25 +2,30 @@ import {Transform} from "./transform";
 
 export class Node {
 
-  transform : Transform;
-  childs : any
-  parent : Node | null;
+  public transform : Transform;
+  public readonly childs : any
+  public parent : Node | null;
 
-  constructor(name : string, parent : Node | null){
+  public constructor(name : string, parent : Node | null){
 
     this.transform = new Transform();
     this.childs = {};
     this.parent = parent;
-    if (this.parent != null) {
-        this.parent.childs[name] = this
+  }
+
+  public addChild(name:string,child:Node){
+    if (this.childs[name] === undefined) {
+        this.childs[name] = child;
+    } else {
+      throw new DictionnaryError("Adding node of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent)
     }
   }
 
-  process(delta : number){
+  public process(delta : number){
 
   }
 
-  draw(delta : number){
+  public draw(delta : number){
 
   }
 

@@ -2,22 +2,24 @@ import {Node} from "./node";
 import {Engine} from "./engine";
 
 export class Game{
-  _scenes_root : Node
-  engine : Engine
-  _canvas : any
+  private scenes_root : Node;
+  public engine : Engine;
+  private canvas : HTMLCanvasElement;
+  public screen_rez_x : number;
+  public screen_rez_y : number;
 
-  constructor(canvas : any){
-    this._scenes_root = new Node("null",null);
-    this._canvas = canvas;
-    this.engine = new Engine(this._canvas)
+  public constructor(canvas : HTMLCanvasElement, screen_rez_x:number, screen_rez_y:number){
+    this.scenes_root = new Node("null",null);
+    this.canvas = canvas;
+    this.engine = new Engine(this.canvas);
   }
 
-  createScene(name : string) : Node{
-    return new Node(name,this._scenes_root)
+  public createScene(name : string) : Node{
+    return new Node(name,this.scenes_root);
   }
 
-  run(){
-    this.engine.run()
+  public run(){
+    this.engine.run();
   }
 
 }

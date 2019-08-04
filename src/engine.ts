@@ -3,79 +3,82 @@ import {MatricesStack} from "./matrices_stack";
 import {Node} from "./node";
 import {Program} from "./program";
 import {Mat4} from "./maths";
+import {Error} from "./error";
 
 export class Engine {
 
-    _programs : { [id: string] : Program; };
-    _matrices_stack : MatricesStack;
-    _gl_ctx : any;
-    _current_scene : Node | null;
-    _last_call : number
+    private programs : { [id: string] : Program; };
+    private matrices_stack : MatricesStack;
+    private gl_ctx : any;
+    private current_scene : Node | null;
+    private last_call : number
 
-
-    constructor(canvas : any){
-      this._programs = {};
-      this._matrices_stack = new MatricesStack();
-      this._gl_ctx = canvas.getContext("webgl");
-      this._current_scene = null;
-      this._last_call = -1;
+    public constructor(canvas : any){
+      this.programs = {};
+      this.matrices_stack = new MatricesStack();
+      this.gl_ctx = canvas.getContext("webgl");
+      this.current_scene = null;
+      this.last_call = -1;
     }
 
-    addProgram(name: string,vertex_source: string,fragment_source: string){
-      this._programs[name] = new Program(vertex_source,fragment_source);
-      this._programs[name]._create(this._gl_ctx);
+    public addProgram(name: string,vertex_source: string,fragment_source: string){
+      if (this.programs[name] === undefined) {
+        this.programs[name] = new Program(vertex_source,fragment_source);
+        this.programs[name]._create(this.gl_ctx);
+      } else {
+        throw new DictionnaryError("Adding program of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent)
+      }
     }
 
-    launchScene(scene : Node){
-      this._current_scene = scene;
+    public launchScene(scene : Node){
+      this.current_scene = scene;
     }
 
 
-    _nodes_process(node : Node,delta : number,){
+    private _process(node : Node,delta : number,){
       let child_names = node.childs.keys();
       for (var name in child_names) {
-        this._nodes_process(node.childs[name],delta);
+        this._process(node.childs[name],delta);
       }
       node.process(delta);
     }
 
-    _process(delta:number){
-      this._matrices_stack._push(Mat4.orthographic(0, this._gl_ctx.canvas.width, this._gl_ctx.canvas.height, 0, -1, 1));
-      this._nodes_draw(this._current_scene,delta);
+    private process(delta:number){
+      this._process(this.current_scene,delta);
     }
 
-    _nodes_draw(node : Node,delta : number,){
+    private _draw(node : Node,delta : number,){
       let child_names = node.childs.keys();
-      this._matrices_stack.apply(node.transform);
+      this.matrices_stack.apply(node.transform);
       for (var name in child_names) {
-        this._nodes_draw(node.childs[name],delta);
+        this._draw(node.childs[name],delta);
       }
       node.draw(delta);
-      this._matrices_stack.pop();
+      this.matrices_stack.pop();
     }
 
-    _draw(delta:number){
-      this._matrices_stack._push(Mat4.orthographic(0, this._gl_ctx.canvas.width, this._gl_ctx.canvas.height, 0, -1, 1));
-      this._nodes_draw(this._current_scene,delta);
+    private draw(delta:number){
+      this.matrices_stack._push(Mat4.orthographic(0, this.gl_ctx.canvas.width, this.gl_ctx.canvas.height, 0, -1, 1));
+      this._draw(this.current_scene,delta);
     }
 
-    _one_iter(){
-      if (this._current_scene != null) {
+    private oneIter(){
+      if (this.current_scene != null) {
           let delta = 0;
-          if (this._last_call == -1) {
-              this._last_call == Date.now();
+          if (this.last_call == -1) {
+              this.last_call == Date.now();
           } else {
               let now = Date.now();
-              delta = now - this._last_call;
-              this._last_call == now;
+              delta = now - this.last_call;
+              this.last_call == now;
           }
-          _process(delta);
-          _draw(delta);
+          process(delta);
+          draw(delta);
       }
     }
 
-    run(){
+    public run(){
       let engine = this;
-      window.requestAnimationFrame(engine._one_iter);
+      window.requestAnimationFrame(engine.oneIter);
     }
 }
