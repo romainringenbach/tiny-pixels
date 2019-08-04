@@ -20,4 +20,8 @@ export class Node {
 
   }
 
+  draw(delta : number){
+
+  }
+
 }

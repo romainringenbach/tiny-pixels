@@ -30,17 +30,36 @@ export class Engine {
       this._current_scene = scene;
     }
 
-    _nodes_draw(node : Node,delta : number){
+
+    _nodes_process(node : Node,delta : number,){
       let child_names = node.childs.keys();
+      for (var name in child_names) {
+        this._nodes_process(node.childs[name],delta);
+      }
       node.process(delta);
+    }
+
+    _process(delta:number){
+      this._matrices_stack._push(Mat4.orthographic(0, this._gl_ctx.canvas.width, this._gl_ctx.canvas.height, 0, -1, 1));
+      this._nodes_draw(this._current_scene,delta);
+    }
+
+    _nodes_draw(node : Node,delta : number,){
+      let child_names = node.childs.keys();
       this._matrices_stack.apply(node.transform);
       for (var name in child_names) {
         this._nodes_draw(node.childs[name],delta);
       }
+      node.draw(delta);
       this._matrices_stack.pop();
     }
 
-    _draw(){
+    _draw(delta:number){
+      this._matrices_stack._push(Mat4.orthographic(0, this._gl_ctx.canvas.width, this._gl_ctx.canvas.height, 0, -1, 1));
+      this._nodes_draw(this._current_scene,delta);
+    }
+
+    _one_iter(){
       if (this._current_scene != null) {
           let delta = 0;
           if (this._last_call == -1) {
@@ -50,13 +69,13 @@ export class Engine {
               delta = now - this._last_call;
               this._last_call == now;
           }
-          this._matrices_stack._push(Mat4.orthographic(0, this._gl_ctx.canvas.width, this._gl_ctx.canvas.height, 0, -1, 1));
-          this._nodes_draw(this._current_scene,delta);
+          _process(delta);
+          _draw(delta);
       }
     }
 
     run(){
       let engine = this;
-      window.requestAnimationFrame(engine._draw);
+      window.requestAnimationFrame(engine._one_iter);
     }
 }
