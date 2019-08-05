@@ -3,7 +3,7 @@ import {Transform} from "./transform";
 export class Node {
 
   private childs : { [id: string] : Node; };
-  public parent : Node | null;
+  private parent : Node | null;
 
   protected constructor(){
     this.transform = new Transform();
@@ -13,14 +13,29 @@ export class Node {
 
   protected addChild(name:string,child:Node){
     if (this.childs[name] === undefined) {
-        this.childs[name] = child;
+      this.childs[name] = child;
     } else {
-      throw new DictionnaryError("Adding node of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent)
+      throw new DictionnaryError("Adding node of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent);
+    }
+  }
+
+  private _getNode(path:string[],_path:string){
+    if (path[0] === '') {
+      return this.parent.getNode(path.shift(),_path+='.');
+    } else {
+      let child = path.shift();
+      if (this.childs[child] != undefined) {
+        return this.childs[child]._getNode(path,_path+=child+'.');
+      } else {
+        throw new DictionnaryError("Get node "+child+" at path "+_path+" failed",DictionnaryErrorType.NotPresent);
+      }
     }
   }
 
   protected getNode(path:string){ // get node with something like name1.name2.name3... etc
+    let elements = path.split('.');
 
+    return _getNode(path,"");
   }
 
   private _process(delta : number){
@@ -30,7 +45,7 @@ export class Node {
     this.process(delta);
   }
 
-  public process(delta : number){
+  protected process(delta : number){
 
   }
 
@@ -43,7 +58,7 @@ export class Node {
     this.matrices_stack.pop();
   }
 
-  public draw(delta : number){
+  protected draw(delta : number){
 
   }
 
@@ -57,6 +72,9 @@ export class Node2D extends Node {
   public addChild(name:string,child:Node2D){
     super.addChild(name,child);
   }
+  public getNode(path:string){
+    super.getNode(path);
+  }
 }
 
 export class Scene extends Node {
@@ -66,5 +84,8 @@ export class Scene extends Node {
   }
   public addChild(name:string,child:Node){
     super.addChild(name,child);
+  }
+  public getNode(path:string){
+    super.getNode(path);
   }
 }

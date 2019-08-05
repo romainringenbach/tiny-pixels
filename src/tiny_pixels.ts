@@ -11,7 +11,7 @@ export class TinyPixels extends Node {
     private programs : { [id: string] : Program; };
     private matrices_stack : MatricesStack;
     private gl_ctx : any;
-    private current_scene : Scene | null;
+    private current_scene : string | null;
     private last_call : number
 
     public constructor(canvas : HTMLCanvasElement){
@@ -32,8 +32,17 @@ export class TinyPixels extends Node {
       }
     }
 
-    public launchScene(scene : Node){
-      this.current_scene = scene;
+    public addScene(name:string,scene:Scene){
+      super.addChild(name,scene);
+    }
+
+    public launchScene(name:string){
+      if (this.childs[name] != undefined) {
+          this.current_scene = name;
+      } else {
+        throw new DictionnaryError("launch scene : "+name+" failed",DictionnaryErrorType.NotPresent)
+      }
+
     }
 
     private oneIter(){
@@ -46,9 +55,11 @@ export class TinyPixels extends Node {
               delta = now - this.last_call;
               this.last_call == now;
           }
-          this._process(delta)
+          gl.clearColor(0, 0, 0, 0);
+          gl.clear(gl.COLOR_BUFFER_BIT);
+          this.childs[this.current_scene]._process(delta);
           this.matrices_stack.push(Mat4.orthographic(0, this.gl_ctx.canvas.width, this.gl_ctx.canvas.height, 0, -1, 1));
-          this._draw(delta);
+          this.childs[this.current_scene]._draw(delta);
           this.matrices_stack.pop()
       }
     }
