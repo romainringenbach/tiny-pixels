@@ -1,6 +1,6 @@
 import {Transform} from "./transform";
 
-export class Node {
+export abstract class Node {
 
   private childs : { [id: string] : Node; };
   private parent : Node | null;
@@ -38,6 +38,15 @@ export class Node {
     return _getNode(path,"");
   }
 
+  private _ready(delta : number){
+    for (var name in this.childs) {
+      this.childs[name]._ready(delta)
+    }
+    this.ready(delta);
+  }
+
+  protected abstract ready(delta : number);
+
   private _process(delta : number){
     for (var name in this.childs) {
       this.childs[name]._process(delta)
@@ -45,22 +54,18 @@ export class Node {
     this.process(delta);
   }
 
-  protected process(delta : number){
+  protected abstract process(delta : number);
 
-  }
-
-  private _draw(delta : number){
+  private _draw(gl : any, delta : number){
     this.matrices_stack.apply(this.transform);
     for (var name in this.childs) {
       this.childs[name]._draw(delta)
     }
-    this.draw(delta);
+    this.draw(gl,delta);
     this.matrices_stack.pop();
   }
 
-  protected draw(delta : number){
-
-  }
+  protected abstract draw(gl : any,delta : number);
 
 }
 
@@ -75,6 +80,9 @@ export class Node2D extends Node {
   public getNode(path:string){
     super.getNode(path);
   }
+  protected ready(delta : number){}
+  protected process(delta : number){}
+  protected draw(gl : any,delta : number){}
 }
 
 export class Scene extends Node {
@@ -88,4 +96,7 @@ export class Scene extends Node {
   public getNode(path:string){
     super.getNode(path);
   }
+  protected ready(delta : number){};
+  protected process(delta : number){};
+  protected draw(gl : any,delta : number){};
 }

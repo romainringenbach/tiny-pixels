@@ -1,9 +1,13 @@
 
 import {MatricesStack} from "./matrices_stack";
-import {Node} from "./node";
 import {Program} from "./program";
 import {Mat4} from "./maths";
 import {Error} from "./error";
+
+export * from "./node";
+export * from "./program";
+export * from "./maths";
+export * from "./error";
 
 export class TinyPixels extends Node {
 
@@ -23,10 +27,10 @@ export class TinyPixels extends Node {
       this.last_call = -1;
     }
 
-    public addProgram(name: string,vertex_source: string,fragment_source: string){
+    public addProgram(name: string,program:Program){
       if (this.programs[name] === undefined) {
-        this.programs[name] = new Program(vertex_source,fragment_source);
-        this.programs[name]._create(this.gl_ctx);
+        this.programs[name] = program;
+        this.programs[name].create(this.gl_ctx);
       } else {
         throw new DictionnaryError("Adding program of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent)
       }
