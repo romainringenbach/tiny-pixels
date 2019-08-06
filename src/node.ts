@@ -1,4 +1,5 @@
 import {Transform} from "./transform";
+import {Engine} from "./engine";
 
 export abstract class Node {
 
@@ -38,34 +39,34 @@ export abstract class Node {
     return _getNode(path,"");
   }
 
-  private _ready(delta : number){
+  private _ready(engine: Engine ,delta : number){
     for (var name in this.childs) {
-      this.childs[name]._ready(delta)
+      this.childs[name]._ready(engine,delta)
     }
-    this.ready(delta);
+    this.ready(engine,delta);
   }
 
-  protected abstract ready(delta : number);
+  protected abstract ready(engine: Engine ,delta : number);
 
-  private _process(delta : number){
+  private _process(engine: Engine ,delta : number){
     for (var name in this.childs) {
-      this.childs[name]._process(delta)
+      this.childs[name]._process(engine,delta)
     }
-    this.process(delta);
+    this.process(engine,delta);
   }
 
-  protected abstract process(delta : number);
+  protected abstract process(engine: Engine ,delta : number);
 
-  private _draw(gl : any, delta : number){
+  private _draw(gl : any, engine: Engine ,delta : number){
     this.matrices_stack.apply(this.transform);
     for (var name in this.childs) {
-      this.childs[name]._draw(delta)
+      this.childs[name]._draw(gl,engine,delta)
     }
-    this.draw(gl,delta);
+    this.draw(gl,engine,delta);
     this.matrices_stack.pop();
   }
 
-  protected abstract draw(gl : any,delta : number);
+  protected abstract draw(engine: Engine ,gl : any,delta : number);
 
 }
 

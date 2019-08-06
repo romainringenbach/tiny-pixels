@@ -3,10 +3,10 @@ import {Quad} from "./program";
 
 export class Sprite {
 
-  sprite:Object
+  sprite:object
 
 
-  constructor(sprite:Object,  ){
+  constructor(sprite:object,  ){
     super();
   }
 

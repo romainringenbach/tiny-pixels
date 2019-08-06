@@ -41,7 +41,7 @@ export class Program {
   }
 }
 
-export class Quad {
+export class Quad extends Program {
     public constructor(){
 
       let vertex_source = "                               \
