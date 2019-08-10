@@ -14,4 +14,15 @@ export class Transform {
     this.scale_y  = scale_y;
     this.z_index = z_index;
   }
+
+  public clone() : Transform{
+    return new Transform(
+      this.translation_x,
+      this.translation_y,
+      this.rotatio,
+      this.scale_x,
+      this.scale_y,
+      this.z_index
+    )
+  }
 }

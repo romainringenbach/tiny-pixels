@@ -75,4 +75,25 @@ export class Node {
 
   protected draw(engine: Engine ,gl : any,delta : number){}
 
+  // Note : the node returned is parentless
+  public clone() : Node {
+    let n = new Node();
+    return n.copyFrom(this);
+  }
+
+  protected copyFrom(node : Node){
+    this.transform = node.transform.clone();
+
+    for (var name in this.childs) {
+      this.childs[name].parent = null;
+    }
+
+    this.childs = {};
+
+    for (var name in node.childs) {
+      this.addChild(this.childs[name].clone)
+    }
+
+  }
+
 }

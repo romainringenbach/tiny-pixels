@@ -1,7 +1,7 @@
-import {Node2D} from "./node";
+import {Node} from "./node";
 import {BasicTextureShader} from "./program";
 
-export class Sprite extends Node2D {
+export class Sprite extends Node {
 
   sprite:object
 
@@ -19,8 +19,7 @@ export class Sprite extends Node2D {
   draw(gl:any,engine:Engine,delta:number){
     gl.bindTexture(gl.TEXTURE_2D, this.sprite);
 
-    // Tell WebGL to use our shader program pair
-    gl.useProgram("BasicTextureShader");
+    engine.useProgram("BasicTextureShader");
 
     // Setup the attributes to pull data from our buffers
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -31,7 +30,7 @@ export class Sprite extends Node2D {
     gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
     // Set the matrix.
-    
+
 
     // Tell the shader to get the texture from texture unit 0
     gl.uniform1i(textureLocation, 0);
