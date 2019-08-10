@@ -33,12 +33,20 @@ export class TinyPixels extends Node implements Engine {
         this.programs[name] = program;
         this.programs[name].create(this.gl_ctx);
       } else {
-        throw new DictionnaryError("Adding program of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent)
+        throw new DictionnaryError("Adding program of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent);
       }
     }
 
-    public setCurrentProgram(name:string){
+    public programExist(name:string) : bool {
+      return (this.programs[name] != undefined)
+    }
 
+    public useProgram(name:string){
+      if (this.programs[name] != undefined) {
+        this.programs[name].use(this.gl_ctx);
+      } else {
+        throw new DictionnaryError("Using program "+name+" failed",DictionnaryErrorType.NotPresent);
+      }
     }
 
     public addScene(name:string,scene:Scene){
@@ -49,7 +57,7 @@ export class TinyPixels extends Node implements Engine {
       if (this.childs[name] != undefined) {
           this.current_scene = name;
       } else {
-        throw new DictionnaryError("launch scene : "+name+" failed",DictionnaryErrorType.NotPresent)
+        throw new DictionnaryError("launch scene : "+name+" failed",DictionnaryErrorType.NotPresent);
       }
 
     }
@@ -79,4 +87,9 @@ export class TinyPixels extends Node implements Engine {
       let engine = this;
       window.requestAnimationFrame(engine.oneIter);
     }
+
+    //useless for now
+    protected ready(delta : number){}
+    protected process(delta : number){}
+    protected draw(gl : any,delta : number){}
 }
