@@ -22,7 +22,12 @@ export abstract class Node {
 
   private _getNode(path:string[],_path:string){
     if (path[0] === '') {
-      return this.parent.getNode(path.shift(),_path+='.');
+      if (this.parent != null) {
+          return this.parent.getNode(path.shift(),_path+='.');
+      } else {
+        throw new DictionnaryError("Get node "+child+" at path "+_path+" failed",DictionnaryErrorType.NotPresent);
+      }
+
     } else {
       let child = path.shift();
       if (this.childs[child] != undefined) {
@@ -33,7 +38,7 @@ export abstract class Node {
     }
   }
 
-  protected getNode(path:string){ // get node with something like name1.name2.name3... etc
+  public getNode(path:string){ // get node with something like name1.name2.name3... etc
     let elements = path.split('.');
 
     return _getNode(path,"");
@@ -78,9 +83,6 @@ export class Node2D extends Node {
   public addChild(name:string,child:Node2D){
     super.addChild(name,child);
   }
-  public getNode(path:string){
-    super.getNode(path);
-  }
   protected ready(delta : number){}
   protected process(delta : number){}
   protected draw(gl : any,delta : number){}
@@ -93,9 +95,6 @@ export class Scene extends Node {
   }
   public addChild(name:string,child:Node){
     super.addChild(name,child);
-  }
-  public getNode(path:string){
-    super.getNode(path);
   }
   protected ready(delta : number){};
   protected process(delta : number){};
