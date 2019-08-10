@@ -49,11 +49,7 @@ export class TinyPixels extends Node implements Engine {
       }
     }
 
-    public addScene(name:string,scene:Scene){
-      super.addChild(name,scene);
-    }
-
-    public launchScene(name:string){
+    public launchNodeAsScene(name:string){
       if (this.childs[name] != undefined) {
           this.current_scene = name;
       } else {
@@ -87,9 +83,4 @@ export class TinyPixels extends Node implements Engine {
       let engine = this;
       window.requestAnimationFrame(engine.oneIter);
     }
-
-    //useless for now
-    protected ready(delta : number){}
-    protected process(delta : number){}
-    protected draw(gl : any,delta : number){}
 }

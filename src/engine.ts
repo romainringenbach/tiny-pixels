@@ -3,5 +3,5 @@ export interface Engine {
   public programExist(name:string) : bool;
   public useProgram(name:string);
 
-  public launchScene(name:string);
+  public launchNodeAsScene(name:string);
 }

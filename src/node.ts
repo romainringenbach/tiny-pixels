@@ -1,20 +1,22 @@
 import {Transform} from "./transform";
 import {Engine} from "./engine";
 
-export abstract class Node {
+export class Node {
 
   private childs : { [id: string] : Node; };
   private parent : Node | null;
+  public transform : Transform;
 
-  protected constructor(){
+  public constructor(){
     this.transform = new Transform();
     this.childs = {};
     this.parent = null;
   }
 
-  protected addChild(name:string,child:Node){
+  public addChild(name:string,child:Node){
     if (this.childs[name] === undefined) {
       this.childs[name] = child;
+      child.parent = this;
     } else {
       throw new DictionnaryError("Adding node of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent);
     }
@@ -51,7 +53,7 @@ export abstract class Node {
     this.ready(engine,delta);
   }
 
-  protected abstract ready(engine: Engine ,delta : number);
+  protected ready(engine: Engine ,delta : number){}
 
   private _process(engine: Engine ,delta : number){
     for (var name in this.childs) {
@@ -60,7 +62,7 @@ export abstract class Node {
     this.process(engine,delta);
   }
 
-  protected abstract process(engine: Engine ,delta : number);
+  protected process(engine: Engine ,delta : number){}
 
   private _draw(gl : any, engine: Engine ,delta : number){
     this.matrices_stack.apply(this.transform);
@@ -71,32 +73,6 @@ export abstract class Node {
     this.matrices_stack.pop();
   }
 
-  protected abstract draw(engine: Engine ,gl : any,delta : number);
+  protected draw(engine: Engine ,gl : any,delta : number){}
 
-}
-
-export class Node2D extends Node {
-  public transform : Transform;
-  public constructor (){
-    super();
-  }
-  public addChild(name:string,child:Node2D){
-    super.addChild(name,child);
-  }
-  protected ready(delta : number){}
-  protected process(delta : number){}
-  protected draw(gl : any,delta : number){}
-}
-
-export class Scene extends Node {
-  public constructor (){
-    super();
-    this.parent = null;
-  }
-  public addChild(name:string,child:Node){
-    super.addChild(name,child);
-  }
-  protected ready(delta : number){};
-  protected process(delta : number){};
-  protected draw(gl : any,delta : number){};
 }
