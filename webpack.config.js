@@ -2,6 +2,7 @@ var path = require('path');
 
 module.exports = {
     // Change to your "entry-point".
+    mode: 'development',
     entry: './src/tiny_pixels',
     output: {
         path: path.resolve(__dirname, 'dist'),

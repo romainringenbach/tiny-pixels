@@ -1,5 +1,6 @@
 import {Transform} from "./transform";
 import {Engine} from "./engine";
+import {DictionnaryErrorType,DictionnaryError} from "./error";
 
 export class Node {
 
@@ -22,40 +23,52 @@ export class Node {
     }
   }
 
-  private _getNode(path:string[],_path:string){
+  public removeChild(name:string){
+    if (this.childs[name] != undefined) {
+      delete this.childs[name];
+    } else {
+      throw new DictionnaryError("Removing node of name: "+name+" failed",DictionnaryErrorType.NotPresent);
+    }
+  }
+
+  protected _getNode(path:string[],_path:string) : Node{
     if (path[0] === '') {
       if (this.parent != null) {
-          return this.parent.getNode(path.shift(),_path+='.');
+        path.shift();
+        return this.parent._getNode(path,_path+='.');
       } else {
-        throw new DictionnaryError("Get node "+child+" at path "+_path+" failed",DictionnaryErrorType.NotPresent);
+        throw new DictionnaryError("Get parent at path "+_path+" failed",DictionnaryErrorType.NotPresent);
       }
 
-    } else {
-      let child = path.shift();
-      if (this.childs[child] != undefined) {
-        return this.childs[child]._getNode(path,_path+=child+'.');
+    } else if (path.length > 0) {
+      var child =  path.shift();
+      if (this.childs[child!] != undefined) {
+        return this.childs[child!]._getNode(path,_path+=child+'.');
       } else {
         throw new DictionnaryError("Get node "+child+" at path "+_path+" failed",DictionnaryErrorType.NotPresent);
       }
+    } else if (path.length == 0){
+      return this;
     }
+    return new Node();
   }
 
-  public getNode(path:string){ // get node with something like name1.name2.name3... etc
-    let elements = path.split('.');
+  public getNode(path:string) : Node{ // get node with something like name1.name2.name3... etc
+    var elements = path.split('.');
 
-    return _getNode(path,"");
+    return this._getNode(elements,"");
   }
 
-  private _ready(engine: Engine ,delta : number){
+  protected _ready(engine: Engine){
     for (var name in this.childs) {
-      this.childs[name]._ready(engine,delta)
+      this.childs[name]._ready(engine)
     }
-    this.ready(engine,delta);
+    this.ready(engine);
   }
 
-  protected ready(engine: Engine ,delta : number){}
+  protected ready(engine: Engine){}
 
-  private _process(engine: Engine ,delta : number){
+  protected _process(engine: Engine ,delta : number){
     for (var name in this.childs) {
       this.childs[name]._process(engine,delta)
     }
@@ -64,13 +77,13 @@ export class Node {
 
   protected process(engine: Engine ,delta : number){}
 
-  private _draw(gl : any, engine: Engine ,delta : number){
-    this.matrices_stack.apply(this.transform);
+  protected _draw(gl : any, engine: Engine ,delta : number){
+    engine.stackApply(this.transform);
     for (var name in this.childs) {
       this.childs[name]._draw(gl,engine,delta)
     }
     this.draw(gl,engine,delta);
-    this.matrices_stack.pop();
+    engine.stackPop();
   }
 
   protected draw(engine: Engine ,gl : any,delta : number){}
@@ -78,10 +91,11 @@ export class Node {
   // Note : the node returned is parentless
   public clone() : Node {
     let n = new Node();
-    return n.copyFrom(this);
+    n.copyFrom(this);
+    return n;
   }
 
-  protected copyFrom(node : Node){
+  protected copyFrom(node : Node) : void{
     this.transform = node.transform.clone();
 
     for (var name in this.childs) {
@@ -91,7 +105,7 @@ export class Node {
     this.childs = {};
 
     for (var name in node.childs) {
-      this.addChild(this.childs[name].clone)
+      this.addChild(name,this.childs[name].clone());
     }
 
   }

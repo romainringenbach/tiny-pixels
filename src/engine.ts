@@ -1,7 +1,13 @@
-export interface Engine {
-  public addProgram(name: string,program:Program);
-  public programExist(name:string) : bool;
-  public useProgram(name:string);
+import {Program} from "./program";
+import {Transform} from "./transform";
 
-  public launchNodeAsScene(name:string);
+export interface Engine {
+  addProgram(name: string,program:Program):void;
+  programExist(name:string) : boolean;
+  useProgram(name:string):void;
+
+  launchNodeAsScene(name:string):void;
+
+  stackApply(transform:Transform):void;
+  stackPop():void;
 }

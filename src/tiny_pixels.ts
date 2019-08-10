@@ -2,8 +2,11 @@
 import {MatricesStack} from "./matrices_stack";
 import {Program} from "./program";
 import {Mat4} from "./maths";
-import {Error} from "./error";
+import {DictionnaryErrorType,DictionnaryError} from "./error";
 import {Engine} from "./engine"
+import {Camera} from "./camera"
+import {Transform} from "./transform"
+import {Node} from "./node"
 
 export * from "./node";
 export * from "./program";
@@ -18,14 +21,19 @@ export class TinyPixels extends Node implements Engine {
     private gl_ctx : any;
     private current_scene : string | null;
     private last_call : number
+    public readonly camera : Camera;
+    private scenes : { [id: string] : Node; };
 
     public constructor(canvas : HTMLCanvasElement){
+      super();
       this.programs = {};
       this.matrices_stack = new MatricesStack();
       this.canvas = canvas;
       this.gl_ctx = this.canvas.getContext("webgl");
       this.current_scene = null;
       this.last_call = -1;
+      this.camera = new Camera();
+      this.scenes = {};
     }
 
     public addProgram(name: string,program:Program){
@@ -37,25 +45,46 @@ export class TinyPixels extends Node implements Engine {
       }
     }
 
-    public programExist(name:string) : bool {
+    public programExist(name:string) : boolean {
       return (this.programs[name] != undefined)
     }
 
     public useProgram(name:string){
       if (this.programs[name] != undefined) {
-        this.programs[name].use(this.gl_ctx);
+        this.programs[name].use(this.gl_ctx,this.camera.projection_matrix,this.camera.view_matrix,this.matrices_stack.cursor);
       } else {
         throw new DictionnaryError("Using program "+name+" failed",DictionnaryErrorType.NotPresent);
       }
     }
 
+    protected addNodeAsScene(name:string,child:Node){
+      if (this.scenes[name] === undefined) {
+        this.scenes[name] = child;
+      } else {
+        throw new DictionnaryError("Adding scene of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent);
+      }
+    }
+
     public launchNodeAsScene(name:string){
-      if (this.childs[name] != undefined) {
+      if (this.scenes[name] != undefined) {
+          super.removeChild(this.current_scene!);
           this.current_scene = name;
+          super.addChild(this.current_scene!,this.scenes[name]);
       } else {
         throw new DictionnaryError("launch scene : "+name+" failed",DictionnaryErrorType.NotPresent);
       }
 
+    }
+
+    public addChild(name:string,child:Node){}
+
+    public remove(name:string){}
+
+    public stackApply(transform:Transform) : void{
+      this.matrices_stack.apply(transform)
+    }
+    public stackPop() : void{
+      this.matrices_stack.pop()
     }
 
     private oneIter(){
@@ -68,18 +97,16 @@ export class TinyPixels extends Node implements Engine {
               delta = now - this.last_call;
               this.last_call == now;
           }
-          gl.clearColor(0, 0, 0, 0);
-          gl.clear(gl.COLOR_BUFFER_BIT);
-          this.childs[this.current_scene]._process(this,delta);
-          this.matrices_stack.push(Mat4.orthographic(0, this.gl_ctx.canvas.width, this.gl_ctx.canvas.height, 0, -1, 1));
-          this.childs[this.current_scene]._draw(this.gl_ctx,this,delta);
+          this.gl_ctx.clearColor(0, 0, 0, 0);
+          this.gl_ctx.clear(this.gl_ctx.COLOR_BUFFER_BIT);
+          this._process(this,delta);
+          this._draw(this.gl_ctx,this,delta);
           this.matrices_stack.pop()
       }
     }
 
     public run(){
-      this._ready();
-
+      this._ready(this);
       let engine = this;
       window.requestAnimationFrame(engine.oneIter);
     }

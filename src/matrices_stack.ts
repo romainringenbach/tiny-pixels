@@ -4,7 +4,7 @@ import {Transform} from "./transform";
 export class MatricesStack {
 
     private stack : number[][];
-    private cursor : number[];
+    public cursor : number[];
 
     public constructor(){
       this.stack = [];

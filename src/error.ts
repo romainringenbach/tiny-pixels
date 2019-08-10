@@ -1,4 +1,4 @@
-enum DictionnaryErrorType {
+export enum DictionnaryErrorType {
   NotPresent = "NotPresent",
   AlreadyPresent = "AlreadyPresent"
 }

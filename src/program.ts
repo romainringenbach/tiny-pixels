@@ -40,8 +40,22 @@ export class Program {
 
   }
 
-  public use(gl:any){
+  public use(gl:any,projection_matrix:number[],view_matrix:number[],model_matrix:number[]){
     gl.useProgram(this.p);
+
+    let u_model_matrix_location = gl.getUniformLocation(this.p,"u_model_matrix");
+    if (u_model_matrix_location != null) {
+        gl.uniformMatrix4fv(u_model_matrix_location, false, model_matrix)
+    }
+    let u_view_matrix_location = gl.getUniformLocation(this.p,"u_view_matrix");
+    if (u_view_matrix_location != null) {
+        gl.uniformMatrix4fv(u_view_matrix_location, false, view_matrix)
+    }
+    let u_projection_matrix_location = gl.getUniformLocation(this.p,"u_projection_matrix");
+    if (u_projection_matrix_location != null) {
+        gl.uniformMatrix4fv(u_projection_matrix_location, false, projection_matrix)
+    }
+
   }
 }
 

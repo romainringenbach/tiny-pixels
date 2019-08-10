@@ -6,7 +6,7 @@ export class Sprite extends Node {
   sprite:object
 
 
-  constructor(sprite:object,  ){
+  constructor(sprite:object){
     super();
   }
 

@@ -19,7 +19,7 @@ export class Transform {
     return new Transform(
       this.translation_x,
       this.translation_y,
-      this.rotatio,
+      this.rotation,
       this.scale_x,
       this.scale_y,
       this.z_index
