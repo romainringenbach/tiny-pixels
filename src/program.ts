@@ -39,9 +39,13 @@ export class Program {
     gl.deleteProgram(this.p);
 
   }
+
+  public use(gl:any){
+    gl.useProgram(this.p);
+  }
 }
 
-export class Quad extends Program {
+export class BasicTextureShader extends Program {
     public constructor(){
 
       let vertex_source = "                               \
@@ -49,7 +53,9 @@ export class Quad extends Program {
         attribute vec2 a_texCoord;                        \
                                                           \
         varying vec2 v_texCoord;                          \
-        uniform mat4 u_vm                                 \
+        uniform mat4 u_model_matrix                       \
+        uniform mat4 u_view_matrix                        \
+        uniform mat4 u_projection_matrix                  \
         void main() {                                     \
           gl_Position = u_vm* vect4(a_position,1.0,1.0);  \
           v_texCoord = a_texCoord;                        \
