@@ -73,7 +73,9 @@
 -_process(engine: Engine ,delta : number)
 #process(engine: Engine ,delta : number);
 -_draw(gl : any, engine: Engine ,delta : number);
-#draw(engine: Engine ,gl : any,delta : number);</panel_attributes>
+#draw(engine: Engine ,gl : any,delta : number);
+#copyFrom(node:Node);
++clone():Node</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -180,7 +182,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
 +scale_y : number;
 +z_index : number;
 --
-+constructor(transform? :Transform);</panel_attributes>
++constructor(transform? :Transform);
++clone():Transform;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
