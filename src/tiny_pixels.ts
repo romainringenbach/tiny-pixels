@@ -8,10 +8,14 @@ import {Camera} from "./camera"
 import {Transform} from "./transform"
 import {Node} from "./node"
 
-export * from "./node";
-export * from "./program";
-export * from "./maths";
-export * from "./error";
+export {MatricesStack} from "./matrices_stack";
+export {Program} from "./program";
+export {Mat4} from "./maths";
+export {DictionnaryErrorType,DictionnaryError} from "./error";
+export {Engine} from "./engine"
+export {Camera} from "./camera"
+export {Transform} from "./transform"
+export {Node} from "./node"
 
 export class TinyPixels extends Node implements Engine {
 
