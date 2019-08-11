@@ -7,11 +7,13 @@ export class Node {
   private childs : { [id: string] : Node; };
   private parent : Node | null;
   public transform : Transform;
+  public program : string;
 
   public constructor(){
     this.transform = new Transform();
     this.childs = {};
     this.parent = null;
+    this.program = "";
   }
 
   public addChild(name:string,child:Node){
@@ -81,6 +83,9 @@ export class Node {
     engine.stackApply(this.transform);
     for (var name in this.childs) {
       this.childs[name]._draw(gl,engine,delta)
+    }
+    if (this.program != "") {
+        engine.useProgram(this.program);
     }
     this.draw(gl,engine,delta);
     engine.stackPop();

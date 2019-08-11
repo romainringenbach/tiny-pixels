@@ -5,16 +5,18 @@
     <id>UMLClass</id>
     <coordinates>
       <x>648</x>
-      <y>480</y>
+      <y>448</y>
       <w>280</w>
-      <h>80</h>
+      <h>112</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Engine&gt;&gt;
 --
 +addProgram(name: String, program: Program);
 +programExist(name:string) : bool;
 +useProgram(name:string);
-+launchNodeAsScene(name:string);</panel_attributes>
++launchNodeAsScene(name:string);
++stackApply(transform:Transform);
++stackPop();</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -35,6 +37,9 @@
 -last_call : number
 --
 +constructor(canvas : HTMLCanvasElement);
++addNodeAsScene(name:string,child:Node);
++addChild(name:string,node:Node);
++removeChild(name:string);
 -oneIter();
 +run();</panel_attributes>
     <additional_attributes/>
@@ -56,16 +61,18 @@
       <x>272</x>
       <y>480</y>
       <w>360</w>
-      <h>224</h>
+      <h>288</h>
     </coordinates>
     <panel_attributes>Node
 --
 -childs : { [id: string] : Node; };
 -parent : Node | null;
 +transform : Transform
++program : string;
 --
 +constructor();
 +addChild(name:string,child:Node);
++removeChild(name:string);
 -_getNode(path:string[],_path:string)
 +getNode(path:string)
 -_ready(engine: Engine ,delta : number)
@@ -75,7 +82,7 @@
 -_draw(gl : any, engine: Engine ,delta : number);
 #draw(engine: Engine ,gl : any,delta : number);
 #copyFrom(node:Node);
-+clone():Node</panel_attributes>
++clone():Node;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -128,8 +135,8 @@ m2=*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>528</x>
-      <y>24</y>
+      <x>560</x>
+      <y>48</y>
       <w>456</w>
       <h>176</h>
     </coordinates>
@@ -146,8 +153,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>664</x>
-      <y>240</y>
+      <x>648</x>
+      <y>264</y>
       <w>296</w>
       <h>144</h>
     </coordinates>
@@ -204,21 +211,21 @@ m2=1
     <id>Relation</id>
     <coordinates>
       <x>784</x>
-      <y>376</y>
+      <y>400</y>
       <w>256</w>
-      <h>288</h>
+      <h>264</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 m2=1
 -matrices_stack</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0;190.0;80.0;190.0;240.0;150.0;240.0;150.0;340.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;190.0;50.0;190.0;210.0;150.0;210.0;150.0;310.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>192</y>
+      <x>768</x>
+      <y>216</y>
       <w>24</w>
       <h>64</h>
     </coordinates>
@@ -229,11 +236,42 @@ m2=1
     <id>Relation</id>
     <coordinates>
       <x>600</x>
-      <y>320</y>
-      <w>80</w>
+      <y>344</y>
+      <w>64</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1008</x>
+      <y>720</y>
+      <w>208</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>Camera
+--
+-projection_matrix : number[];
+-view_matrix : number[];
+-transform : Transform;
+--
++constructor();
++ready(gl:any,engine:Engine);
++process(gl:any,engine:Engine);
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>784</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

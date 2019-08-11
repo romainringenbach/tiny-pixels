@@ -57,7 +57,7 @@ export class TinyPixels extends Node implements Engine {
       }
     }
 
-    protected addNodeAsScene(name:string,child:Node){
+    public addNodeAsScene(name:string,child:Node){
       if (this.scenes[name] === undefined) {
         this.scenes[name] = child;
       } else {
