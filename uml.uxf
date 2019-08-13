@@ -4,12 +4,13 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
-      <y>448</y>
+      <x>384</x>
+      <y>184</y>
       <w>280</w>
-      <h>160</h>
+      <h>224</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Engine&gt;&gt;
+    <panel_attributes>bg=yellow
+&lt;&lt;Engine&gt;&gt;
 --
 +addProgram(name: String, program: Program);
 +programExist(name:string) : bool;
@@ -18,18 +19,20 @@
 +stackApply(transform:Transform);
 +stackPop();
 --
-+getCurrentScene():string</panel_attributes>
++getCurrentScene():string
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
-      <y>624</y>
+      <x>384</x>
+      <y>424</y>
       <w>280</w>
-      <h>256</h>
+      <h>280</h>
     </coordinates>
-    <panel_attributes>TinyPixels
+    <panel_attributes>bg=yellow
+TinyPixels
 --
 -canvas : HTMLCanvasElement
 -programs : { [id: string] : Program; };
@@ -45,14 +48,16 @@ _+camera:Camera;_
 +addChild(name:string,node:Node);
 +removeChild(name:string);
 -oneIter();
-+run();</panel_attributes>
++run();
+--
+_+inputs:Inputs_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>600</y>
+      <x>520</x>
+      <y>400</y>
       <w>24</w>
       <h>40</h>
     </coordinates>
@@ -62,12 +67,13 @@ _+camera:Camera;_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>264</x>
-      <y>528</y>
+      <x>0</x>
+      <y>264</y>
       <w>360</w>
-      <h>352</h>
+      <h>440</h>
     </coordinates>
-    <panel_attributes>Node
+    <panel_attributes>bg=yellow
+Node
 --
 -childs : { [id: string] : Node; };
 -parent : Node | null;
@@ -86,15 +92,27 @@ _+camera:Camera;_
 -_draw(gl : any, engine: Engine ,delta : number);
 #draw(engine: Engine ,gl : any,delta : number);
 #copyFrom(node:Node);
-+clone():Node;</panel_attributes>
++clone():Node;
+--
+_+id_
+-_physics_process(engine:Engine,delta:number)
+#physics_process(engine:Engine,delta:number);
+-connections : { [id: string] : Node; };
+-signals : string[];
++signal(signal:string,emitter:Node);
++connect(signal:string,listener:Node,callback:string);
++disconnect(signal:string,listener:Node);
++emitSignal(signal:string);
++getGlobalTransform():Transform;
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>960</x>
-      <y>440</y>
-      <w>360</w>
+      <x>696</x>
+      <y>176</y>
+      <w>432</w>
       <h>208</h>
     </coordinates>
     <panel_attributes>Programs
@@ -114,29 +132,28 @@ _+camera:Camera;_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>640</y>
+      <x>656</x>
+      <y>376</y>
       <w>208</w>
-      <h>72</h>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=*
 m2=*
 -programs</panel_attributes>
-    <additional_attributes>170.0;10.0;170.0;60.0;10.0;60.0</additional_attributes>
+    <additional_attributes>170.0;10.0;170.0;90.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>960</x>
-      <y>264</y>
-      <w>360</w>
+      <x>696</x>
+      <y>0</y>
+      <w>432</w>
       <h>152</h>
     </coordinates>
     <panel_attributes>Namespace:Mat4
 --
-orthographic(l:number,r:number,
-b:number,t:number,n:number,f:number);
+orthographic(l:number,r:number,b:number,t:number,n:number,f:number);
 identity();
 translation(tx:number,ty:number,tz = 0.0);
 rotation(r:number,degree=true);
@@ -147,8 +164,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
-      <y>264</y>
+      <x>384</x>
+      <y>0</y>
       <w>288</w>
       <h>144</h>
     </coordinates>
@@ -169,8 +186,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>264</x>
-      <y>264</y>
+      <x>0</x>
+      <y>0</y>
       <w>360</w>
       <h>184</h>
     </coordinates>
@@ -190,8 +207,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>440</y>
+      <x>176</x>
+      <y>176</y>
       <w>88</w>
       <h>104</h>
     </coordinates>
@@ -204,22 +221,22 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>400</y>
+      <x>520</x>
+      <y>136</y>
       <w>176</w>
-      <h>296</h>
+      <h>320</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 m2=1
 -matrices_stack</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0;190.0;50.0;190.0;340.0;180.0;340.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;190.0;50.0;190.0;370.0;180.0;370.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>928</x>
-      <y>352</y>
+      <x>664</x>
+      <y>88</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -229,8 +246,8 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>344</y>
+      <x>352</x>
+      <y>80</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -240,12 +257,13 @@ m2=1
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>952</x>
-      <y>744</y>
+      <x>688</x>
+      <y>496</y>
       <w>208</w>
-      <h>128</h>
+      <h>208</h>
     </coordinates>
-    <panel_attributes>Camera
+    <panel_attributes>bg=yellow
+Camera
 --
 -projection_matrix : number[];
 -view_matrix : number[];
@@ -262,8 +280,8 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>704</y>
+      <x>656</x>
+      <y>456</y>
       <w>200</w>
       <h>56</h>
     </coordinates>
@@ -274,12 +292,287 @@ _+camera_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>704</y>
+      <x>352</x>
+      <y>440</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>920</x>
+      <y>408</y>
+      <w>208</w>
+      <h>296</h>
+    </coordinates>
+    <panel_attributes>bg=red
+Input
+--
+
+--
++isActionPressed(action:string);
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>728</y>
+      <w>168</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+Sprite</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>728</y>
+      <w>168</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+AnimatedSprite</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>384</x>
+      <y>728</y>
+      <w>184</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+/PhysicBody/
+--
+-collision_shape:
+CollisionShape;
+-collision_mask : number
+-collision_layer : number
+-collisions : PhysicBody[];
+-physic_material:PhysicMaterial;
+--
++isColliding(body:
+PhysicBody):boolean;
++</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>576</x>
+      <y>728</y>
+      <w>168</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+RigidBody
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>768</x>
+      <y>728</y>
+      <w>168</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+StaticBody</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>728</y>
+      <w>168</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+KinematicBody</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>80</x>
+      <y>696</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>752</y>
+      <w>48</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>296</x>
+      <y>696</y>
+      <w>176</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;200.0;30.0;200.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>704</y>
+      <w>176</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0;200.0;10.0;200.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>704</y>
+      <w>360</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0;430.0;10.0;430.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>704</y>
+      <w>552</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0;670.0;10.0;670.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1152</x>
+      <y>0</y>
+      <w>272</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+CollisionLayers
+--
+-layers:{[id:string]:bit_position};
+--
++getLayer(layer:number,layer:string):number;
++removeLayer(layer:number,
+layer:string):number;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1152</x>
+      <y>232</y>
+      <w>272</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+PhysicMaterial
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1152</x>
+      <y>464</y>
+      <w>272</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>bg=red
+/CollisionShape/
+--
++transform:Transform;
+--
++constructor();
+/isColliding(collision_shape:
+CollisionShape):boolean/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1152</x>
+      <y>728</y>
+      <w>128</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+AABB
+--
++width:number
++height:number
+--
+constructor(width:
+number,height:
+number);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1296</x>
+      <y>728</y>
+      <w>128</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=red
+Circle
+--
++rayon:number
+--
++constructor(rayon:
+number);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1208</x>
+      <y>696</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1352</x>
+      <y>696</y>
+      <w>24</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
 </diagram>
