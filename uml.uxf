@@ -4,10 +4,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>384</x>
-      <y>184</y>
+      <x>392</x>
+      <y>192</y>
       <w>280</w>
-      <h>224</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>bg=yellow
 &lt;&lt;Engine&gt;&gt;
@@ -26,8 +26,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>384</x>
-      <y>424</y>
+      <x>392</x>
+      <y>432</y>
       <w>280</w>
       <h>280</h>
     </coordinates>
@@ -56,21 +56,21 @@ _+inputs:Inputs_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
+      <x>528</x>
       <y>400</y>
       <w>24</w>
-      <h>40</h>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>264</y>
+      <x>8</x>
+      <y>208</y>
       <w>360</w>
-      <h>440</h>
+      <h>504</h>
     </coordinates>
     <panel_attributes>bg=yellow
 Node
@@ -79,7 +79,13 @@ Node
 -parent : Node | null;
 +transform : Transform
 +program : string;
+_+id_
+-nodes: static Node[];
+-signals : string[];
+-connections : connections : { [id: string] : 
+{[id:number] : string}; };
 --
++static:getNodeById(id):Node;
 +constructor();
 +addChild(name:string,child:Node);
 +removeChild(name:string);
@@ -93,26 +99,28 @@ Node
 #draw(engine: Engine ,gl : any,delta : number);
 #copyFrom(node:Node);
 +clone():Node;
---
-_+id_
--_physics_process(engine:Engine,delta:number)
-#physics_process(engine:Engine,delta:number);
--connections : { [id: string] : Node; };
--signals : string[];
-+signal(signal:string,emitter:Node);
+#signal(name:string);
 +connect(signal:string,listener:Node,callback:string);
 +disconnect(signal:string,listener:Node);
-+emitSignal(signal:string);
++emitSignal(signal:string,data:object);
 +getGlobalTransform():Transform;
+--
+
+-_physics_process(engine:Engine,delta:number)
+#physics_process(engine:Engine,delta:number);
+
+
+
+
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>696</x>
-      <y>176</y>
-      <w>432</w>
+      <x>704</x>
+      <y>184</y>
+      <w>216</w>
       <h>208</h>
     </coordinates>
     <panel_attributes>Programs
@@ -123,8 +131,10 @@ _+id_
 -fsh : any;
 -p : any;
 --
-+constructor(vertex_source : string, fragment_source : string)
--createShader(gl : any, type : any, source:string)
++constructor(vertex_source : string,
+fragment_source : string)
+-createShader(gl : any, type : any, 
+source:string)
 +create(gl : any)
 +use(gl:any)</panel_attributes>
     <additional_attributes/>
@@ -132,8 +142,8 @@ _+id_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>656</x>
-      <y>376</y>
+      <x>664</x>
+      <y>384</y>
       <w>208</w>
       <h>96</h>
     </coordinates>
@@ -146,14 +156,15 @@ m2=*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>696</x>
-      <y>0</y>
-      <w>432</w>
+      <x>568</x>
+      <y>8</y>
+      <w>256</w>
       <h>152</h>
     </coordinates>
     <panel_attributes>Namespace:Mat4
 --
-orthographic(l:number,r:number,b:number,t:number,n:number,f:number);
+orthographic(l:number,r:number,b:number,
+t:number,n:number,f:number);
 identity();
 translation(tx:number,ty:number,tz = 0.0);
 rotation(r:number,degree=true);
@@ -164,8 +175,8 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>384</x>
-      <y>0</y>
+      <x>256</x>
+      <y>8</y>
       <w>288</w>
       <h>144</h>
     </coordinates>
@@ -186,9 +197,9 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>0</y>
-      <w>360</w>
+      <x>8</x>
+      <y>8</y>
+      <w>232</w>
       <h>184</h>
     </coordinates>
     <panel_attributes>Transform
@@ -201,42 +212,43 @@ mul(matrixA:number[], matrixB:number[]);</panel_attributes>
 +z_index : number;
 --
 +constructor(transform? :Transform);
-+clone():Transform;</panel_attributes>
++clone():Transform;
++apply(transform: Transform);</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>176</x>
-      <y>176</y>
-      <w>88</w>
-      <h>104</h>
+      <x>232</x>
+      <y>160</y>
+      <w>120</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 m2=1
 +transform</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0;120.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
-      <y>136</y>
-      <w>176</w>
+      <x>392</x>
+      <y>144</y>
+      <w>312</w>
       <h>320</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 m2=1
 -matrices_stack</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0;190.0;50.0;190.0;370.0;180.0;370.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;360.0;50.0;360.0;370.0;350.0;370.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>664</x>
-      <y>88</y>
+      <x>536</x>
+      <y>96</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -246,19 +258,19 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
-      <y>80</y>
-      <w>48</w>
+      <x>232</x>
+      <y>88</y>
+      <w>40</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;30.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>688</x>
-      <y>496</y>
+      <x>696</x>
+      <y>504</y>
       <w>208</w>
       <h>208</h>
     </coordinates>
@@ -280,8 +292,8 @@ Camera
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>656</x>
-      <y>456</y>
+      <x>664</x>
+      <y>464</y>
       <w>200</w>
       <h>56</h>
     </coordinates>
@@ -292,8 +304,8 @@ _+camera_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
-      <y>440</y>
+      <x>360</x>
+      <y>448</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -303,12 +315,12 @@ _+camera_</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>920</x>
-      <y>408</y>
+      <x>944</x>
+      <y>184</y>
       <w>208</w>
-      <h>296</h>
+      <h>208</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 Input
 --
 
@@ -320,20 +332,20 @@ Input
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>728</y>
+      <x>8</x>
+      <y>736</y>
       <w>168</w>
       <h>216</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 Sprite</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
-      <y>728</y>
+      <x>200</x>
+      <y>736</y>
       <w>168</w>
       <h>216</h>
     </coordinates>
@@ -344,31 +356,25 @@ AnimatedSprite</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>384</x>
-      <y>728</y>
-      <w>184</w>
+      <x>688</x>
+      <y>736</y>
+      <w>352</w>
       <h>216</h>
     </coordinates>
     <panel_attributes>bg=red
 /PhysicBody/
 --
--collision_shape:
-CollisionShape;
--collision_mask : number
--collision_layer : number
--collisions : PhysicBody[];
 -physic_material:PhysicMaterial;
+-
 --
-+isColliding(body:
-PhysicBody):boolean;
-+</panel_attributes>
+-</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>576</x>
-      <y>728</y>
+      <x>1048</x>
+      <y>736</y>
       <w>168</w>
       <h>216</h>
     </coordinates>
@@ -380,8 +386,8 @@ RigidBody
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>768</x>
-      <y>728</y>
+      <x>1240</x>
+      <y>736</y>
       <w>168</w>
       <h>216</h>
     </coordinates>
@@ -392,8 +398,8 @@ StaticBody</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>960</x>
-      <y>728</y>
+      <x>1432</x>
+      <y>736</y>
       <w>168</w>
       <h>216</h>
     </coordinates>
@@ -404,8 +410,8 @@ KinematicBody</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>80</x>
-      <y>696</y>
+      <x>88</x>
+      <y>704</y>
       <w>24</w>
       <h>48</h>
     </coordinates>
@@ -415,8 +421,8 @@ KinematicBody</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>160</x>
-      <y>752</y>
+      <x>168</x>
+      <y>760</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -426,19 +432,8 @@ KinematicBody</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>296</x>
-      <y>696</y>
-      <w>176</w>
-      <h>48</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;30.0;200.0;30.0;200.0;40.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>504</x>
-      <y>704</y>
+      <x>976</x>
+      <y>712</y>
       <w>176</w>
       <h>40</h>
     </coordinates>
@@ -448,8 +443,8 @@ KinematicBody</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>704</y>
+      <x>976</x>
+      <y>712</y>
       <w>360</w>
       <h>40</h>
     </coordinates>
@@ -459,8 +454,8 @@ KinematicBody</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>704</y>
+      <x>976</x>
+      <y>712</y>
       <w>552</w>
       <h>40</h>
     </coordinates>
@@ -470,12 +465,12 @@ KinematicBody</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1152</x>
-      <y>0</y>
+      <x>840</x>
+      <y>8</y>
       <w>272</w>
-      <h>216</h>
+      <h>152</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 CollisionLayers
 --
 -layers:{[id:string]:bit_position};
@@ -488,10 +483,10 @@ layer:string):number;</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1152</x>
-      <y>232</y>
+      <x>1128</x>
+      <y>8</y>
       <w>272</w>
-      <h>216</h>
+      <h>152</h>
     </coordinates>
     <panel_attributes>bg=red
 PhysicMaterial
@@ -502,30 +497,32 @@ PhysicMaterial
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1152</x>
-      <y>464</y>
-      <w>272</w>
-      <h>240</h>
+      <x>1424</x>
+      <y>8</y>
+      <w>168</w>
+      <h>112</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 /CollisionShape/
 --
 +transform:Transform;
++shape:Shape
 --
 +constructor();
-/isColliding(collision_shape:
-CollisionShape):boolean/</panel_attributes>
+/isColliding(collision_shape:/
+/CollisionShape):boolean/
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1152</x>
-      <y>728</y>
+      <x>1320</x>
+      <y>280</y>
       <w>128</w>
       <h>216</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 AABB
 --
 +width:number
@@ -539,12 +536,12 @@ number);</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1296</x>
-      <y>728</y>
+      <x>1464</x>
+      <y>280</y>
       <w>128</w>
       <h>216</h>
     </coordinates>
-    <panel_attributes>bg=red
+    <panel_attributes>bg=orange
 Circle
 --
 +rayon:number
@@ -556,8 +553,19 @@ number);</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1208</x>
-      <y>696</y>
+      <x>1376</x>
+      <y>248</y>
+      <w>128</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>140.0;10.0;140.0;30.0;10.0;30.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>248</y>
       <w>24</w>
       <h>48</h>
     </coordinates>
@@ -565,14 +573,74 @@ number);</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1424</x>
+      <y>144</y>
+      <w>168</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>bg=orange
+&lt;&lt;Shape&gt;&gt;
+--
++type:const ShapeType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
     <id>Relation</id>
     <coordinates>
-      <x>1352</x>
-      <y>696</y>
+      <x>1504</x>
+      <y>112</y>
       <w>24</w>
       <h>48</h>
     </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>392</x>
+      <y>736</y>
+      <w>280</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>bg=orange
+CollisionNode
+--
+-collision_shape:
+CollisionShape;
+-collision_mask : number
+-collision_layer : number
+-collisions : CollisionNode[];
+--
+s:collisionDetected : {collider:CollisionNode}
+s:click : {}
+--
++isColliding(collider:CollisionNode) : boolean
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>552</x>
+      <y>712</y>
+      <w>368</w>
+      <h>40</h>
+    </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0;440.0;10.0;440.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>208</x>
+      <y>704</y>
+      <w>264</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;310.0;30.0;310.0;40.0</additional_attributes>
   </element>
 </diagram>
