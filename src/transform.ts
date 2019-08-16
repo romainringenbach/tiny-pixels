@@ -25,4 +25,13 @@ export class Transform {
       this.z_index
     )
   }
+
+  public apply(transform:Transform){
+    this.translation_x+=transform.translation_x;
+    this.translation_y+=transform.translation_y;
+    this.rotation+=transform.rotation;
+    this.scale_x*=transform.scale_x;
+    this.scale_y*=transform.scale_y;
+    this.z_index+=transform.z_index;
+  }
 }

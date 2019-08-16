@@ -8,12 +8,30 @@ export class Node {
   private parent : Node | null;
   public transform : Transform;
   public program : string;
+  private signals : string[];
+  private connections : { [id: string] : {[id:number] : string}; };
+  public readonly id : number;
+
+  private static nodes : Node[] = [];
+
+  public static getNodeById(id:number):Node{
+    if (id-1 >= 0 && id-1 < Node.nodes.length) {
+        return Node.nodes[id-1];
+    } else {
+      throw new DictionnaryError("Getting node of id: "+id+" failed",DictionnaryErrorType.NotPresent);
+    }
+
+  }
 
   public constructor(){
     this.transform = new Transform();
     this.childs = {};
     this.parent = null;
     this.program = "";
+    this.signals = [];
+    this.connections = {};
+    Node.nodes.push(this);
+    this.id = Node.nodes.length;
   }
 
   public addChild(name:string,child:Node){
@@ -111,6 +129,68 @@ export class Node {
 
     for (var name in node.childs) {
       this.addChild(name,this.childs[name].clone());
+    }
+
+  }
+
+  protected signal(name:string){
+    for (let s in this.signals) {
+        if (s == name) {
+            throw new DictionnaryError("Adding signal of name: "+name+" failed",DictionnaryErrorType.AlreadyPresent);
+        }
+    }
+    this.signals.push(name);
+    this.connections[name] = [];
+  }
+
+  public connect(signal:string,listener:Node,callback:string){
+    if (this.connections[signal] != undefined) {
+      if (this.connections[signal][listener.id] === undefined) {
+        this.connections[signal][listener.id] = callback;
+      } else {
+        throw new DictionnaryError("Connect listener to signal of name: "+signal+" failed",DictionnaryErrorType.AlreadyPresent);
+      }
+
+    } else {
+      throw new DictionnaryError("Connect to signal of name: "+signal+" failed",DictionnaryErrorType.NotPresent);
+    }
+  }
+
+  public disconnect(signal:string,listener:Node){
+    if (this.connections[signal] != undefined) {
+      if (this.connections[signal][listener.id] != undefined) {
+        delete this.connections[signal][listener.id];
+      } else {
+        throw new DictionnaryError("Disconnect listener to signal of name: "+signal+" failed",DictionnaryErrorType.NotPresent);
+      }
+
+    } else {
+      throw new DictionnaryError("Disconnect to signal of name: "+signal+" failed",DictionnaryErrorType.NotPresent);
+    }
+  }
+
+  public emitSignal(signal:string,data:object){
+    if (this.connections[signal] != undefined) {
+
+      for (let key in this.connections[signal]) {
+          let n = Node.getNodeById(Number(key));
+          let cb = this.connections[signal][Number(key)];
+          n[cb](data);
+      }
+
+    } else {
+      throw new DictionnaryError("Emit signal of name: "+signal+" failed",DictionnaryErrorType.NotPresent);
+    }
+  }
+
+  public getGlobalTransform() : Transform{
+
+    if (this.parent != null) {
+      let t = this.transform.clone();
+      t.apply(this.parent.getGlobalTransform());
+      return t;
+    } else {
+      return this.transform.clone();
     }
 
   }
