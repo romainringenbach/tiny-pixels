@@ -69,7 +69,7 @@ export class TinyPixels extends Node implements Engine {
       }
     }
 
-    public getAttributelocation(name:string) : any {
+    public getAttributeLocation(name:string) : any {
       if (this.current_program != null) {
         return this.programs[this.current_program].getAttributeLocation(name);
       } else {
@@ -77,7 +77,7 @@ export class TinyPixels extends Node implements Engine {
       }
     }
 
-    public getUniformlocation(name:string) : any {
+    public getUniformLocation(name:string) : any {
       if (this.current_program != null) {
         return this.programs[this.current_program].getUniformLocation(name);
       } else {
@@ -104,7 +104,7 @@ export class TinyPixels extends Node implements Engine {
 
     }
 
-    public getCurrentScene():string {
+    public getCurrentScene():string|null {
       return this.current_scene;
     }
 
@@ -138,7 +138,7 @@ export class TinyPixels extends Node implements Engine {
     }
 
     public run(){
-      this._ready(this);
+      this._ready(this.gl_ctx,this);
       let engine = this;
       window.requestAnimationFrame(engine.oneIter);
     }

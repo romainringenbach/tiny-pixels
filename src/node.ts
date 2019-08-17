@@ -79,14 +79,14 @@ export class Node {
     return this._getNode(elements,"");
   }
 
-  protected _ready(engine: Engine){
+  protected _ready(gl:any,engine: Engine){
     for (var name in this.childs) {
-      this.childs[name]._ready(engine)
+      this.childs[name]._ready(gl,engine)
     }
-    this.ready(engine);
+    this.ready(gl,engine);
   }
 
-  protected ready(engine: Engine){}
+  protected ready(gl:any,engine: Engine){}
 
   protected _process(engine: Engine ,delta : number){
     for (var name in this.childs) {

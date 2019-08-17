@@ -84,11 +84,11 @@ export class Program {
     throw new ProgramError("Getting uniform of name : "+name+" failed",ProgramErrorType.UniformDontExist);
   }
 
-  protected _getAttributeLocation(name:string) : any {
+  protected _getAttributeLocation(gl:any,name:string) : any {
     return gl.getAttribLocation(this.p,name);
   }
 
-  protected _getUniformLocation(name:string) : any {
+  protected _getUniformLocation(gl:any,name:string) : any {
     return gl.getUniformLocation(this.p,name);
   }
 }
@@ -97,6 +97,7 @@ export class BasicTextureShader extends Program {
 
     private a_position_location : any;
     private a_texCoord_location : any;
+    private u_tex_location : any;
 
     public constructor(){
 
@@ -115,10 +116,10 @@ export class BasicTextureShader extends Program {
        ";
       let fragment_source = "                             \
         precision mediump float;                          \
-        uniform sampler2D u_image;                        \
+        uniform sampler2D u_tex;                        \
         varying vec2 v_texCoord;                          \
         void main() {                                     \
-          gl_FragColor = texture2D(u_image, v_texCoord);  \
+          gl_FragColor = texture2D(u_tex, v_texCoord);  \
         }                                                 \
       ";
 
@@ -127,8 +128,9 @@ export class BasicTextureShader extends Program {
 
     public create(gl : any){
       super.create(gl);
-      this.a_position_location = _getAttributeLocation("a_position");
-      this.a_texCoord_location = _getAttributeLocation("a_texCoord");
+      this.a_position_location = this._getAttributeLocation(gl,"a_position");
+      this.a_texCoord_location = this._getAttributeLocation(gl,"a_texCoord");
+      this.u_tex_location = this._getUniformLocation(gl,"u_tex");
     }
 
     public getAttributeLocation(name:string) : any{
@@ -137,7 +139,15 @@ export class BasicTextureShader extends Program {
       } else if (name == "a_texCoord"){
         return this.a_texCoord_location;
       } else {
-        return super.getAttribute(name);
+        return super.getAttributeLocation(name);
+      }
+    }
+
+    public getUniformLocation(name:string) : any{
+      if (name == "u_tex") {
+        return this.u_tex_location;
+      } else {
+        return super.getUniformLocation(name);
       }
     }
 

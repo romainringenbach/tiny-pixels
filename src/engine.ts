@@ -9,7 +9,7 @@ export interface Engine {
   getUniformLocation(name:string) : any;
 
   launchNodeAsScene(name:string):void;
-  getCurrentScene():string;
+  getCurrentScene():string|null;
 
   stackApply(transform:Transform):void;
   stackPop():void;
