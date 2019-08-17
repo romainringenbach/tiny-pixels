@@ -7,6 +7,7 @@ import {Engine} from "./engine"
 import {Camera} from "./camera"
 import {Transform} from "./transform"
 import {Node} from "./node"
+import {Inputs} from "./inputs"
 
 export {MatricesStack} from "./matrices_stack";
 export {Program} from "./program";
@@ -16,6 +17,7 @@ export {Engine} from "./engine"
 export {Camera} from "./camera"
 export {Transform} from "./transform"
 export {Node} from "./node"
+export {Inputs} from "./inputs"
 
 export class TinyPixels extends Node implements Engine {
 
@@ -27,8 +29,9 @@ export class TinyPixels extends Node implements Engine {
     private last_call : number
     public readonly camera : Camera;
     private scenes : { [id: string] : Node; };
+    public readonly inputs : Inputs;
 
-    public constructor(canvas : HTMLCanvasElement){
+    public constructor(canvas : HTMLCanvasElement, inputs:Inputs){
       super();
       this.programs = {};
       this.matrices_stack = new MatricesStack();
@@ -38,6 +41,7 @@ export class TinyPixels extends Node implements Engine {
       this.last_call = -1;
       this.camera = new Camera();
       this.scenes = {};
+      this.inputs = inputs;
     }
 
     public addProgram(name: string,program:Program){
@@ -78,6 +82,10 @@ export class TinyPixels extends Node implements Engine {
         throw new DictionnaryError("launch scene : "+name+" failed",DictionnaryErrorType.NotPresent);
       }
 
+    }
+
+    public getCurrentScene():string {
+      return this.current_scene;
     }
 
     public addChild(name:string,child:Node){}

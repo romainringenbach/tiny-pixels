@@ -140,7 +140,7 @@ export class Node {
         }
     }
     this.signals.push(name);
-    this.connections[name] = [];
+    this.connections[name] = {};
   }
 
   public connect(signal:string,listener:Node,callback:string){
@@ -175,7 +175,7 @@ export class Node {
       for (let key in this.connections[signal]) {
           let n = Node.getNodeById(Number(key));
           let cb = this.connections[signal][Number(key)];
-          n[cb](data);
+          (n as any)[cb](data);
       }
 
     } else {

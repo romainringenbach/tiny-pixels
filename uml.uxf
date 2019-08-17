@@ -9,8 +9,7 @@
       <w>280</w>
       <h>216</h>
     </coordinates>
-    <panel_attributes>bg=yellow
-&lt;&lt;Engine&gt;&gt;
+    <panel_attributes>&lt;&lt;Engine&gt;&gt;
 --
 +addProgram(name: String, program: Program);
 +programExist(name:string) : bool;
@@ -42,15 +41,17 @@ TinyPixels
 -last_call : number
 _+camera:Camera;_
 -scene : { [id: string] : Node; };
+_+inputs:Inputs_
 --
-+constructor(canvas : HTMLCanvasElement);
++constructor(canvas : HTMLCanvasElement,
+inputs:Inputs);
 +addNodeAsScene(name:string,child:Node);
 +addChild(name:string,node:Node);
 +removeChild(name:string);
 -oneIter();
 +run();
---
-_+inputs:Inputs_</panel_attributes>
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -72,8 +73,7 @@ _+inputs:Inputs_</panel_attributes>
       <w>360</w>
       <h>504</h>
     </coordinates>
-    <panel_attributes>bg=yellow
-Node
+    <panel_attributes>Node
 --
 -childs : { [id: string] : Node; };
 -parent : Node | null;
@@ -320,12 +320,15 @@ _+camera_</panel_attributes>
       <w>208</w>
       <h>208</h>
     </coordinates>
-    <panel_attributes>bg=orange
-Input
+    <panel_attributes>Inputs
 --
-
+-actions : { [id: string] : boolean; };
+_#canvas: HTMLCanvasElement;_
 --
-+isActionPressed(action:string);
++constructor(canvas: HTMLCanvasElement)
++isActionPressed(action:string) : boolean
+#registerAction(action:string) : void
+#setAction(action:string,value:boolean) : void
 </panel_attributes>
     <additional_attributes/>
   </element>

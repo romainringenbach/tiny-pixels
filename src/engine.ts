@@ -7,7 +7,10 @@ export interface Engine {
   useProgram(name:string):void;
 
   launchNodeAsScene(name:string):void;
+  getCurrentScene():string;
 
   stackApply(transform:Transform):void;
   stackPop():void;
+
+
 }
