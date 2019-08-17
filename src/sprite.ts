@@ -8,7 +8,7 @@ function isPowerOf2(value : number) : boolean {
 
 export class Sprite extends Node {
 
-  sprite:any
+  sprite:any;
   tex:any;
 
   private static positions : number[] = [

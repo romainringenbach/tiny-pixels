@@ -91,8 +91,8 @@ _+id_
 +removeChild(name:string);
 -_getNode(path:string[],_path:string)
 +getNode(path:string)
--_ready(engine: Engine ,delta : number)
-#ready(engine: Engine ,delta : number);
+-_ready(gl:any,engine: Engine ,delta : number)
+#ready(gl:any,engine: Engine ,delta : number);
 -_process(engine: Engine ,delta : number)
 #process(engine: Engine ,delta : number);
 -_draw(gl : any, engine: Engine ,delta : number);
@@ -345,23 +345,20 @@ _#canvas: HTMLCanvasElement;_
     <coordinates>
       <x>8</x>
       <y>736</y>
-      <w>168</w>
+      <w>256</w>
       <h>216</h>
     </coordinates>
-    <panel_attributes>bg=orange
-Sprite</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>200</x>
-      <y>736</y>
-      <w>168</w>
-      <h>216</h>
-    </coordinates>
-    <panel_attributes>bg=red
-AnimatedSprite</panel_attributes>
+    <panel_attributes>Sprite
+--
+-sprite:any;
+-tex:any;
+-positions : static:number[]
+-tex_coords : static:number[]
+-position_buffer : static:any = null;
+-tex_coord_buffer : static:any = null;
+--
++ready(gl:any,engine:Engine)
++draw(gl:any,engine:Engine,delta:number)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -428,17 +425,6 @@ KinematicBody</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>168</x>
-      <y>760</y>
-      <w>48</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
