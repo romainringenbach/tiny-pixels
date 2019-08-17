@@ -19,8 +19,6 @@ export class Sprite extends Node {
   draw(gl:any,engine:Engine,delta:number){
     gl.bindTexture(gl.TEXTURE_2D, this.sprite);
 
-    engine.useProgram("BasicTextureShader");
-
     // Setup the attributes to pull data from our buffers
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.enableVertexAttribArray(positionLocation);

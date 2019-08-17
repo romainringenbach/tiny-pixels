@@ -1,3 +1,5 @@
+import {ProgramErrorType,ProgramError} from "./error";
+
 export class Program {
 
   private vsrc : string;
@@ -6,9 +8,17 @@ export class Program {
   private fsh : any;
   private p : any;
 
+  private u_model_matrix_location : any;
+  private u_view_matrix_location : any;
+  private u_projection_matrix_location : any;
+
   public constructor(vertex_source : string, fragment_source : string){
     this.vsrc =    vertex_source;
     this.fsrc =  fragment_source;
+
+    this.u_model_matrix_location = null;
+    this.u_view_matrix_location = null;
+    this.u_projection_matrix_location = null;
   }
 
   private createShader(gl : any, type : any, source:string){
@@ -19,7 +29,11 @@ export class Program {
     if (success) {
         return shader;
     } else {
-      return null
+      let typeN = "vertex";
+      if (type == gl.FRAGMENT_SHADER) {
+        typeN = "fragment";
+      }
+      throw new ProgramError("Compilation of "+typeN+" failed",ProgramErrorType.ShaderCompilationFailed);
     }
   }
 
@@ -32,34 +46,58 @@ export class Program {
     gl.linkProgram(this.p)
     let success = gl.getProgramParameter(this.p, gl.LINK_STATUS);
     if (success) {
-      return;
+      this.u_model_matrix_location = gl.getUniformLocation(this.p,"u_model_matrix");
+      this.u_view_matrix_location = gl.getUniformLocation(this.p,"u_view_matrix");
+      this.u_projection_matrix_location = gl.getUniformLocation(this.p,"u_projection_matrix");
+    } else {
+      console.log(gl.getProgramInfoLog(this.p));
+      gl.deleteProgram(this.p);
+      this.p = null;
+      throw new ProgramError("Linking of program failed",ProgramErrorType.LinkingProgramFailed);
     }
 
-    console.log(gl.getProgramInfoLog(this.p));
-    gl.deleteProgram(this.p);
+
 
   }
 
   public use(gl:any,projection_matrix:number[],view_matrix:number[],model_matrix:number[]){
+
     gl.useProgram(this.p);
 
-    let u_model_matrix_location = gl.getUniformLocation(this.p,"u_model_matrix");
-    if (u_model_matrix_location != null) {
-        gl.uniformMatrix4fv(u_model_matrix_location, false, model_matrix)
+    if (this.u_model_matrix_location != null) {
+        gl.uniformMatrix4fv(this.u_model_matrix_location, false, model_matrix)
     }
-    let u_view_matrix_location = gl.getUniformLocation(this.p,"u_view_matrix");
-    if (u_view_matrix_location != null) {
-        gl.uniformMatrix4fv(u_view_matrix_location, false, view_matrix)
+    if (this.u_view_matrix_location != null) {
+        gl.uniformMatrix4fv(this.u_view_matrix_location, false, view_matrix)
     }
-    let u_projection_matrix_location = gl.getUniformLocation(this.p,"u_projection_matrix");
-    if (u_projection_matrix_location != null) {
-        gl.uniformMatrix4fv(u_projection_matrix_location, false, projection_matrix)
+    if (this.u_projection_matrix_location != null) {
+        gl.uniformMatrix4fv(this.u_projection_matrix_location, false, projection_matrix)
     }
 
+  }
+
+  public getAttributeLocation(name:string) : any{
+    throw new ProgramError("Getting attribut of name : "+name+" failed",ProgramErrorType.AttributDontExist);
+  }
+
+  public getUniformLocation(name:string) : any{
+    throw new ProgramError("Getting uniform of name : "+name+" failed",ProgramErrorType.UniformDontExist);
+  }
+
+  protected _getAttributeLocation(name:string) : any {
+    return gl.getAttribLocation(this.p,name);
+  }
+
+  protected _getUniformLocation(name:string) : any {
+    return gl.getUniformLocation(this.p,name);
   }
 }
 
 export class BasicTextureShader extends Program {
+
+    private a_position_location : any;
+    private a_texCoord_location : any;
+
     public constructor(){
 
       let vertex_source = "                               \
@@ -86,4 +124,22 @@ export class BasicTextureShader extends Program {
 
       super(vertex_source,fragment_source);
     }
+
+    public create(gl : any){
+      super.create(gl);
+      this.a_position_location = _getAttributeLocation("a_position");
+      this.a_texCoord_location = _getAttributeLocation("a_texCoord");
+    }
+
+    public getAttributeLocation(name:string) : any{
+      if (name == "a_position") {
+        return this.a_position_location;
+      } else if (name == "a_texCoord"){
+        return this.a_texCoord_location;
+      } else {
+        return super.getAttribute(name);
+      }
+    }
+
+
 }

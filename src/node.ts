@@ -7,7 +7,7 @@ export class Node {
   private childs : { [id: string] : Node; };
   private parent : Node | null;
   public transform : Transform;
-  public program : string;
+  public program : string | null;
   private signals : string[];
   private connections : { [id: string] : {[id:number] : string}; };
   public readonly id : number;
@@ -27,7 +27,7 @@ export class Node {
     this.transform = new Transform();
     this.childs = {};
     this.parent = null;
-    this.program = "";
+    this.program = null;
     this.signals = [];
     this.connections = {};
     Node.nodes.push(this);
@@ -102,7 +102,7 @@ export class Node {
     for (var name in this.childs) {
       this.childs[name]._draw(gl,engine,delta)
     }
-    if (this.program != "") {
+    if (this.program != null) {
         engine.useProgram(this.program);
     }
     this.draw(gl,engine,delta);

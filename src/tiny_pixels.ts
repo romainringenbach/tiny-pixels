@@ -13,6 +13,7 @@ export {MatricesStack} from "./matrices_stack";
 export {Program} from "./program";
 export {Mat4} from "./maths";
 export {DictionnaryErrorType,DictionnaryError} from "./error";
+export {ProgramErrorType,ProgramError} from "./error";
 export {Engine} from "./engine"
 export {Camera} from "./camera"
 export {Transform} from "./transform"
@@ -23,6 +24,7 @@ export class TinyPixels extends Node implements Engine {
 
     private canvas : HTMLCanvasElement
     private programs : { [id: string] : Program; };
+    private current_program : string | null;
     private matrices_stack : MatricesStack;
     private gl_ctx : any;
     private current_scene : string | null;
@@ -34,6 +36,7 @@ export class TinyPixels extends Node implements Engine {
     public constructor(canvas : HTMLCanvasElement, inputs:Inputs){
       super();
       this.programs = {};
+      this.current_program = null;
       this.matrices_stack = new MatricesStack();
       this.canvas = canvas;
       this.gl_ctx = this.canvas.getContext("webgl");
@@ -59,9 +62,26 @@ export class TinyPixels extends Node implements Engine {
 
     public useProgram(name:string){
       if (this.programs[name] != undefined) {
+        this.current_program = name;
         this.programs[name].use(this.gl_ctx,this.camera.projection_matrix,this.camera.view_matrix,this.matrices_stack.cursor);
       } else {
         throw new DictionnaryError("Using program "+name+" failed",DictionnaryErrorType.NotPresent);
+      }
+    }
+
+    public getAttributelocation(name:string) : any {
+      if (this.current_program != null) {
+        return this.programs[this.current_program].getAttributeLocation(name);
+      } else {
+        throw new DictionnaryError("Current program not set up",DictionnaryErrorType.NotPresent);
+      }
+    }
+
+    public getUniformlocation(name:string) : any {
+      if (this.current_program != null) {
+        return this.programs[this.current_program].getUniformLocation(name);
+      } else {
+        throw new DictionnaryError("Current program not set up",DictionnaryErrorType.NotPresent);
       }
     }
 
