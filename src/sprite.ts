@@ -38,7 +38,7 @@ export class Sprite extends Node {
     this.sprite = sprite;
   }
 
-  private _ready(gl:any,engine:Engine){
+  protected _ready(gl:any,engine:Engine){
     if (!engine.programExist("BasicTextureShader")) {
         engine.addProgram("BasicTextureShader",new BasicTextureShader());
     }

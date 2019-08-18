@@ -99,6 +99,8 @@ _+id_
 #process(engine: Engine ,delta : number);
 -_draw(gl : any, engine: Engine ,delta : number);
 #draw(engine: Engine ,gl : any,delta : number);
+-_physics_process(engine:Engine,delta:number)
+#physics_process(engine:Engine,delta:number);
 #copyFrom(node:Node);
 +clone():Node;
 #signal(name:string);
@@ -107,11 +109,6 @@ _+id_
 +emitSignal(signal:string,data:object);
 +getGlobalTransform():Transform;
 --
-
--_physics_process(engine:Engine,delta:number)
-#physics_process(engine:Engine,delta:number);
-
-
 
 
 </panel_attributes>

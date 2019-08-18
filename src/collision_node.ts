@@ -1,4 +1,6 @@
 import {Node} from "./node";
+import {AcceleratingStructure} from "./accelerating_structure";
+import {Engine} from "./engine"
 
 export enum ShapeType {
   AABB = "AABB",
@@ -6,13 +8,13 @@ export enum ShapeType {
 }
 
 export interface Shape {
-    public static readonly type:ShapeType
+  readonly type:ShapeType
 }
 
 export class AABB implements Shape {
-  public static readonly type:ShapeType = ShapeType.AABB;
-  private _w;
-  private _h;
+  public readonly type:ShapeType = ShapeType.AABB;
+  private _w : number = 0;
+  private _h : number = 0;
 
   public constructor(width:number,height:number){
     this.width = width;
@@ -20,10 +22,10 @@ export class AABB implements Shape {
   }
 
   get width():number {
-    return _w;
+    return this._w;
   }
 
-  set width(width:number):void {
+  set width(width:number) {
     if (width > 0) {
         this._w = width;
     } else {
@@ -32,10 +34,10 @@ export class AABB implements Shape {
   }
 
   get height():number {
-    return _h;
+    return this._h;
   }
 
-  set height(height:number):void {
+  set height(height:number) {
     if (height > 0) {
         this._h = height;
     } else {
@@ -45,18 +47,18 @@ export class AABB implements Shape {
 }
 
 export class Circle implements Shape {
-  public static readonly type:ShapeType = ShapeType.Circle;
-  private _r;
+  public readonly type:ShapeType = ShapeType.Circle;
+  private _r : number = 0;
 
   public constructor(rayon:number){
     this.rayon = rayon;
   }
 
   get rayon():number {
-    return _r;
+    return this._r;
   }
 
-  set rayon(rayon:number):void {
+  set rayon(rayon:number){
     if (rayon > 0) {
         this._r = rayon;
     } else {
@@ -67,6 +69,11 @@ export class Circle implements Shape {
 
 export class CollisionShape extends Node  {
   public shape : Shape;
+
+  public constructor(shape:Shape){
+    super();
+    this.shape = shape;
+  }
 
 
   public isColliding(collision_shape:CollisionShape):boolean {
@@ -94,6 +101,53 @@ export class CollisionShape extends Node  {
 
 }
 
+export class Collision {
+    public readonly node : number;
+
+    constructor(collider:CollisionNode){
+      this.node = collider.id;
+    }
+
+}
+
 export class CollisionNode extends Node {
+  private collision_shape: CollisionShape;
+  private collision_mask : number;
+  private collision_layer : number;
+  private collisions : number[];
+
+//s:collisionDetected : {collision:Collision}
+//s:click : {}
+
+  constructor(collision_shape:CollisionShape){
+    super();
+    this.collision_shape = collision_shape;
+    this.collision_mask = 0;
+    this.collision_layer = 0;
+    this.collisions = [];
+
+    this.signal("on_collision");
+    this.signal("on_click");
+  }
+
+  protected _physics_process(engine:Engine,delta:number){
+    this.collisions = [];
+
+    super._physics_process(engine,delta);
+    let possible_colliders = engine.acc_struct.getPossibleCollidingNodeFromNode(this);
+
+    for (let pc in possible_colliders) {
+        let possible_collider = (Node.getNodeById(Number(pc)) as CollisionNode);
+
+        if ((this.collision_layer & possible_collider.collision_mask) != 0) {
+          if (this.collision_shape.isColliding(possible_collider.collision_shape)) {
+              this.collisions.push(possible_collider.id);
+              this.emitSignal("on_collision",new Collision(possible_collider));
+          }
+        }
+    }
+
+  }
+
 
 }

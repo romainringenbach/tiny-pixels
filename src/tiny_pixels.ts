@@ -9,6 +9,7 @@ import {Transform} from "./transform"
 import {Node} from "./node"
 import {Inputs} from "./inputs"
 import {AcceleratingStructure} from "./accelerating_structure"
+import {TileMap} from "./accelerating_structure"
 
 export {MatricesStack} from "./matrices_stack";
 export {Program} from "./program";
@@ -48,6 +49,7 @@ export class TinyPixels extends Node implements Engine {
       this.camera = new Camera();
       this.scenes = {};
       this.inputs = inputs;
+      this.acc_struct = new TileMap();
     }
 
     public addProgram(name: string,program:Program){

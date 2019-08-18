@@ -111,6 +111,17 @@ export class Node {
 
   protected draw(engine: Engine ,gl : any,delta : number){}
 
+  protected _physics_process(engine:Engine,delta:number){
+    for (var name in this.childs) {
+      this.childs[name]._physics_process(engine,delta)
+    }
+    this.physics_process(engine,delta);
+  }
+
+  protected physics_process(engine:Engine,delta:number){}
+
+
+
   // Note : the node returned is parentless
   public clone() : Node {
     let n = new Node();

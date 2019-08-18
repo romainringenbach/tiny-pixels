@@ -104,12 +104,12 @@ export namespace Mat4 {
   }
 
   export class Rect {
-      private _x:number;
-      private _y:number;
-      private _w:number;
-      private _h:number;
+      private _x:number = 0;
+      private _y:number = 0;
+      private _w:number = 0;
+      private _h:number = 0;
 
-      public constructor(x,y,w,h){
+      public constructor(x:number,y:number,w:number,h:number){
         this.x = x;
         this.y = y;
         this.w = w;
@@ -120,7 +120,7 @@ export namespace Mat4 {
         return this._x;
       }
 
-      set x(x:number) : void {
+      set x(x:number){
         if (x >= 0) {
             this._x = x;
         } else {
@@ -132,7 +132,7 @@ export namespace Mat4 {
         return this._x;
       }
 
-      set y(y:number) : void {
+      set y(y:number){
         if (y >= 0) {
             this._y = y;
         } else {
@@ -144,7 +144,7 @@ export namespace Mat4 {
         return this._x;
       }
 
-      set w(w:number) : void {
+      set w(w:number){
         if (w > 0) {
             this._w = w;
         } else {
@@ -156,7 +156,7 @@ export namespace Mat4 {
         return this._x;
       }
 
-      set h(h:number) : void {
+      set h(h:number){
         if (h > 0) {
             this._h = h;
         } else {
