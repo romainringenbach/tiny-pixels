@@ -80,10 +80,10 @@ export class Node {
   }
 
   protected _ready(gl:any,engine: Engine){
+    this.ready(gl,engine);
     for (var name in this.childs) {
       this.childs[name]._ready(gl,engine)
     }
-    this.ready(gl,engine);
   }
 
   protected ready(gl:any,engine: Engine){}

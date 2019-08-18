@@ -11,6 +11,9 @@
     </coordinates>
     <panel_attributes>&lt;&lt;Engine&gt;&gt;
 --
+_+inputs:Inputs;_
+_+acc_struc:AcceleratingStructure;_
+--
 +addProgram(name: String, program: Program);
 +programExist(name:string) : bool;
 +useProgram(name:string);
@@ -41,7 +44,6 @@
 -last_call : number
 _+camera:Camera;_
 -scene : { [id: string] : Node; };
-_+inputs:Inputs_
 --
 +constructor(canvas : HTMLCanvasElement,
 inputs:Inputs);
@@ -497,7 +499,7 @@ PhysicMaterial
       <x>1424</x>
       <y>8</y>
       <w>168</w>
-      <h>112</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>bg=orange
 /CollisionShape/
@@ -506,8 +508,10 @@ PhysicMaterial
 +shape:Shape
 --
 +constructor();
-/isColliding(collision_shape:/
-/CollisionShape):boolean/
+isColliding(collision_shape:
+CollisionShape):boolean
+isOnShape(x:number,
+y:number):boolean;
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -587,12 +591,12 @@ number);</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1504</x>
-      <y>112</y>
+      <y>120</y>
       <w>24</w>
-      <h>48</h>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -650,5 +654,20 @@ s:click : {}
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>480.0;10.0;480.0;100.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>928</x>
+      <y>504</y>
+      <w>328</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;AcceleratingStructure&gt;&gt;
+--
++registerCollisionNode(node:CollisionNode)
++getPossibleCollidingNodeOf(nodeID:number):number[]
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

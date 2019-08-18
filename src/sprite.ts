@@ -38,7 +38,7 @@ export class Sprite extends Node {
     this.sprite = sprite;
   }
 
-  ready(gl:any,engine:Engine){
+  private _ready(gl:any,engine:Engine){
     if (!engine.programExist("BasicTextureShader")) {
         engine.addProgram("BasicTextureShader",new BasicTextureShader());
     }
@@ -67,6 +67,8 @@ export class Sprite extends Node {
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     }
+
+    super._ready(gl,engine);
 
 
   }

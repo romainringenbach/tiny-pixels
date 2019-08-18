@@ -103,4 +103,70 @@ export namespace Mat4 {
     ];
   }
 
+  export class Rect {
+      private _x:number;
+      private _y:number;
+      private _w:number;
+      private _h:number;
+
+      public constructor(x,y,w,h){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+      }
+
+      get x() : number {
+        return this._x;
+      }
+
+      set x(x:number) : void {
+        if (x >= 0) {
+            this._x = x;
+        } else {
+          throw new Error("Setting x failled, the value need to be >= 0");
+        }
+      }
+
+      get y() : number {
+        return this._x;
+      }
+
+      set y(y:number) : void {
+        if (y >= 0) {
+            this._y = y;
+        } else {
+          throw new Error("Setting y failled, the value need to be >= 0");
+        }
+      }
+
+      get w() : number {
+        return this._x;
+      }
+
+      set w(w:number) : void {
+        if (w > 0) {
+            this._w = w;
+        } else {
+          throw new Error("Setting w failled, the value need to be > 0");
+        }
+      }
+
+      get h() : number {
+        return this._x;
+      }
+
+      set h(h:number) : void {
+        if (h > 0) {
+            this._h = h;
+        } else {
+          throw new Error("Setting h failled, the value need to be > 0");
+        }
+      }
+
+      public inRect(x:number,y:number):boolean {
+        return (x >= this.x && y >= this.x && x < this.x+this.w && y < this.y+this.y)
+      }
+  }
+
 }

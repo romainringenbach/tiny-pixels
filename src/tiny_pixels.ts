@@ -8,6 +8,7 @@ import {Camera} from "./camera"
 import {Transform} from "./transform"
 import {Node} from "./node"
 import {Inputs} from "./inputs"
+import {AcceleratingStructure} from "./accelerating_structure"
 
 export {MatricesStack} from "./matrices_stack";
 export {Program} from "./program";
@@ -19,6 +20,7 @@ export {Camera} from "./camera"
 export {Transform} from "./transform"
 export {Node} from "./node"
 export {Inputs} from "./inputs"
+export {AcceleratingStructure} from "./accelerating_structure"
 
 export class TinyPixels extends Node implements Engine {
 
@@ -32,6 +34,7 @@ export class TinyPixels extends Node implements Engine {
     public readonly camera : Camera;
     private scenes : { [id: string] : Node; };
     public readonly inputs : Inputs;
+    public readonly acc_struct : AcceleratingStructure;
 
     public constructor(canvas : HTMLCanvasElement, inputs:Inputs){
       super();
