@@ -105,17 +105,67 @@ export namespace Mat4 {
 
 }
 
+export class Vec2 {
+    x:number;
+    y:number;
+
+    constructor(x:number,y:number){
+      this.x = x;
+      this.y = y;
+    }
+
+    add(v:Vec2):Vec2{
+      return new Vec2(this.x+v.x,this.y+v.y);
+    }
+
+    sub(v:Vec2):Vec2{
+      return new Vec2(this.x-v.x,this.y-v.y);
+    }
+
+    mul(v:Vec2):Vec2{
+      return new Vec2(this.x*v.x,this.y*v.y);
+    }
+
+    div(v:Vec2):Vec2{
+      return new Vec2(this.x/v.x,this.y/v.y);
+    }
+
+    mulS(s:number):Vec2{
+      return new Vec2(this.x*s,this.y*s);
+    }
+
+    divS(s:number):Vec2{
+      return new Vec2(this.x/s,this.y/s);
+    }
+
+    length():number{
+      return Math.sqrt(this.x*this.x + this.y*this.y);
+    }
+}
+
 export class Rect {
     public x:number = 0;
     public y:number = 0;
     private _w:number = 0;
     private _h:number = 0;
 
-    public constructor(x:number,y:number,w:number,h:number){
-      this.x = x;
-      this.y = y;
-      this.w = w;
-      this.h = h;
+    public constructor(x:number,y:number,w:number,h:number,p:boolean=false){
+      if (!p) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+      } else {
+        this.x = Math.min(x,w);
+        this.y = Math.min(y,h);
+        this.w = Math.abs(w-x);
+        this.h = Math.abs(h-y);
+      }
+
+    }
+
+    public getCenter():Vec2{
+      return new Vec2(this.x+this._w/2,this.y+this._h/2);
     }
 
     get w() : number {
@@ -145,4 +195,8 @@ export class Rect {
     public inRect(x:number,y:number):boolean {
       return (x >= this.x && y >= this.x && x < this.x+this.w && y < this.y+this.y)
     }
+}
+
+export function clamp(value:number,min:number,max:number) {
+    return Math.max(min,Math.min(value,max));
 }
