@@ -103,70 +103,46 @@ export namespace Mat4 {
     ];
   }
 
-  export class Rect {
-      private _x:number = 0;
-      private _y:number = 0;
-      private _w:number = 0;
-      private _h:number = 0;
+}
 
-      public constructor(x:number,y:number,w:number,h:number){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+export class Rect {
+    public x:number = 0;
+    public y:number = 0;
+    private _w:number = 0;
+    private _h:number = 0;
+
+    public constructor(x:number,y:number,w:number,h:number){
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+    }
+
+    get w() : number {
+      return this._w;
+    }
+
+    set w(w:number){
+      if (w > 0) {
+          this._w = w;
+      } else {
+        throw new Error("Setting w failled, the value need to be > 0");
       }
+    }
 
-      get x() : number {
-        return this._x;
+    get h() : number {
+      return this._h;
+    }
+
+    set h(h:number){
+      if (h > 0) {
+          this._h = h;
+      } else {
+        throw new Error("Setting h failled, the value need to be > 0");
       }
+    }
 
-      set x(x:number){
-        if (x >= 0) {
-            this._x = x;
-        } else {
-          throw new Error("Setting x failled, the value need to be >= 0");
-        }
-      }
-
-      get y() : number {
-        return this._x;
-      }
-
-      set y(y:number){
-        if (y >= 0) {
-            this._y = y;
-        } else {
-          throw new Error("Setting y failled, the value need to be >= 0");
-        }
-      }
-
-      get w() : number {
-        return this._x;
-      }
-
-      set w(w:number){
-        if (w > 0) {
-            this._w = w;
-        } else {
-          throw new Error("Setting w failled, the value need to be > 0");
-        }
-      }
-
-      get h() : number {
-        return this._x;
-      }
-
-      set h(h:number){
-        if (h > 0) {
-            this._h = h;
-        } else {
-          throw new Error("Setting h failled, the value need to be > 0");
-        }
-      }
-
-      public inRect(x:number,y:number):boolean {
-        return (x >= this.x && y >= this.x && x < this.x+this.w && y < this.y+this.y)
-      }
-  }
-
+    public inRect(x:number,y:number):boolean {
+      return (x >= this.x && y >= this.x && x < this.x+this.w && y < this.y+this.y)
+    }
 }

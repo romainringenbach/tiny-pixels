@@ -1,6 +1,8 @@
 import {Node} from "./node";
 import {AcceleratingStructure} from "./accelerating_structure";
-import {Engine} from "./engine"
+import {Engine} from "./engine";
+import {Rect} from "./maths";
+import {Transform} from "./transform";
 
 export enum ShapeType {
   AABB = "AABB",
@@ -9,6 +11,7 @@ export enum ShapeType {
 
 export interface Shape {
   readonly type:ShapeType
+  getBoundingRect():Rect;
 }
 
 export class AABB implements Shape {
@@ -19,6 +22,10 @@ export class AABB implements Shape {
   public constructor(width:number,height:number){
     this.width = width;
     this.height = height;
+  }
+
+  public getBoundingRect():Rect{
+    return new Rect(0,0,this._w,this._h);
   }
 
   get width():number {
@@ -54,6 +61,10 @@ export class Circle implements Shape {
     this.rayon = rayon;
   }
 
+  public getBoundingRect():Rect{
+    return new Rect(0,0,2*this._r,2*this._r);
+  }
+
   get rayon():number {
     return this._r;
   }
@@ -75,27 +86,33 @@ export class CollisionShape extends Node  {
     this.shape = shape;
   }
 
+  public getBoundingRect():Rect{
+    let t:Transform = this.getGlobalTransform();
+    let r:Rect = this.shape.getBoundingRect();
+    r.x = t.translation_x;
+    r.y = t.translation_y;
+    return r;
+  }
+
 
   public isColliding(collision_shape:CollisionShape):boolean {
     return true;
   }
   public isOnShape(x:number,y:number):boolean {
-    let t = this.getGlobalTransform();
+    if (this.getBoundingRect().inRect(x,y)) {
+      if (this.shape.type == ShapeType.Circle) {
+        let s = (this.shape as Circle);
+        let t = this.getGlobalTransform();
+        let xx = t.translation_x+s.rayon - x;
+        let yy = t.translation_y+s.rayon - y;
+        let d = Math.sqrt((xx)*(xx) + (yy)*(yy))
 
-    if (this.shape.type == ShapeType.Circle) {
-      let s = (this.shape as Circle);
-      let xx = t.translation_x+s.rayon - x;
-      let yy = t.translation_y+s.rayon - y;
-      let d = Math.sqrt((xx)*(xx) + (yy)*(yy))
+        return (d <= s.rayon);
 
-      return (d <= s.rayon);
-
-    } else if(this.shape.type == ShapeType.AABB) {
-      let s = (this.shape as AABB);
-
-      return (x >= t.translation_x && x < t.translation_x + s.width && x >= t.translation_y && y < t.translation_y + s.height)
+      } else if(this.shape.type == ShapeType.AABB) {
+        return true;
+      }
     }
-
     return false;
   }
 
@@ -111,10 +128,10 @@ export class Collision {
 }
 
 export class CollisionNode extends Node {
-  private collision_shape: CollisionShape;
-  private collision_mask : number;
-  private collision_layer : number;
-  private collisions : number[];
+  public collision_shape: CollisionShape;
+  public collision_mask : number;
+  public collision_layer : number;
+  public collisions : number[];
 
 //s:collisionDetected : {collision:Collision}
 //s:click : {}

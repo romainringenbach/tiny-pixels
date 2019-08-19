@@ -37,7 +37,7 @@ export class TinyPixels extends Node implements Engine {
     public readonly inputs : Inputs;
     public readonly acc_struct : AcceleratingStructure;
 
-    public constructor(canvas : HTMLCanvasElement, inputs:Inputs){
+    public constructor(canvas : HTMLCanvasElement, inputs:Inputs, accelerating_structure:AcceleratingStructure){
       super();
       this.programs = {};
       this.current_program = null;
@@ -49,7 +49,7 @@ export class TinyPixels extends Node implements Engine {
       this.camera = new Camera();
       this.scenes = {};
       this.inputs = inputs;
-      this.acc_struct = new TileMap();
+      this.acc_struct = accelerating_structure;
     }
 
     public addProgram(name: string,program:Program){
