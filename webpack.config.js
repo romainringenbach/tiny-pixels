@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
     // Change to your "entry-point".
     mode: 'production',
-    entry: './src/tiny_pixels',
+    entry: './test/game_test_01',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.bundle.js'
